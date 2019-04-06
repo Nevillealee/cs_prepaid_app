@@ -1,0 +1,2 @@
+class SubLineItem < ApplicationRecord
+end
