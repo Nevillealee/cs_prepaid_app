@@ -57,12 +57,12 @@ RSpec.configure do |config|
   end
 
   # start the transaction strategy as examples are run
-  config.around(:each) do |example|
-    DatabaseCleaner.cleaning do
-    example.run
+    config.around(:each) do |example|
+      DatabaseCleaner.cleaning do
+      example.run
+    end
   end
 end
-
 Shoulda::Matchers.configure do |config|
   config.integrate do |with|
     with.test_framework :rspec
