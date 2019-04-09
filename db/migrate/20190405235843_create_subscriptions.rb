@@ -9,7 +9,7 @@ class CreateSubscriptions < ActiveRecord::Migration[5.2]
       t.datetime :cancelled_at
       t.string :product_title
       t.string :variant_title
-      t.decimal :price, scale: 10, precision: 2
+      t.decimal :price, precision: 10, scale: 2
       t.integer :quantity
       t.string :status
       t.bigint :shopify_variant_id
