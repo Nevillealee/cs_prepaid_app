@@ -20,8 +20,6 @@ class CreateOrders < ActiveRecord::Migration[5.2]
       t.string :payment_processor
       # address_is_active depreciated. omitted
       t.integer :is_prepaid
-      # has_many association for easy parsing/queries
-      t.references :line_item, foreign_key: true
       t.jsonb :raw_line_items
       t.jsonb :shipping_address
       t.decimal :total_price, precision: 10, scale: 2

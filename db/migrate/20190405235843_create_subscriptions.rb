@@ -23,7 +23,6 @@ class CreateSubscriptions < ActiveRecord::Migration[5.2]
       t.integer :order_day_of_month
       t.integer :order_day_of_week
       t.jsonb :properties
-      t.references :sub_line_item, foreign_key: true
       t.integer :expire_after_specific_number_of_charges
       t.string :cancellation_reason
       t.string :cancellation_reason_comment
