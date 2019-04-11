@@ -1,7 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users
-  root 'dashboard#index'
-  # devise_for :users, :controllers => { :registrations => 'users/registrations'  }
+  root 'dashboards#index'
+  devise_for :users, :controllers => { :registrations => 'users/registrations'  }
   #
   # devise_scope :user do
   #   authenticated do
@@ -12,5 +11,5 @@ Rails.application.routes.draw do
   #     root 'devise/sessions#new', as: :root
   #   end
   # end
-  # resources :users
+  resources :users
 end
