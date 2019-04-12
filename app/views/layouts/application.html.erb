@@ -4,13 +4,34 @@
     <title>CsPrepaidApp</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
 
   <body>
-    <%= render 'layouts/alerts' %>
-    <%= yield %>
+    <% if user_signed_in? %>
+      <!-- MAIN NAV START -->
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <%= link_to "ReCharge Prepaid Portal", authenticated_root_path, class: 'navbar-brand' %>
+        <ul class="nav">
+          <% if current_user.try(:admin?) %>
+            <li class="nav-item px-2">
+              <%= link_to 'Add new user', new_user_registration_path %>
+            </li>
+            <br />
+          <% end %>
+          <li class="nav-item px-2">
+            <%= link_to 'Edit', edit_user_registration_path %>
+          </li>
+          <li class="nav-item px-2">
+            <%= link_to 'Log out', destroy_user_session_path, method: :delete %>
+          </li>
+        </ul>
+      </nav>
+    <% end %>
+    <!-- MAIN NAV END -->
+    <div class="container-fluid">
+      <%= yield %>
+    </div>
   </body>
 </html>
