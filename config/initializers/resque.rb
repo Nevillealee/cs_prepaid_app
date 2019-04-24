@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Resque.logger.level = Logger::DEBUG
 rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
 rails_env = ENV['RAILS_ENV'] || 'development'

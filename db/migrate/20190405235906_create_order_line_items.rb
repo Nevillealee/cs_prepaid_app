@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateOrderLineItems < ActiveRecord::Migration[5.2]
   def change
     # Order.line_item abstraction

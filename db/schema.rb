@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_10_230455) do
+ActiveRecord::Schema.define(version: 2019_04_23_220446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,19 +37,17 @@ ActiveRecord::Schema.define(version: 2019_04_10_230455) do
   end
 
   create_table "customers", force: :cascade do |t|
-    t.string "customer_hash"
     t.string "email"
     t.string "shopify_customer_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string "first_name"
     t.string "last_name"
-    t.string "billing_first_name"
-    t.string "billing_last_name"
     t.boolean "has_card_error_in_dunning"
     t.integer "number_subscriptions"
     t.integer "number_active_subscriptions"
     t.datetime "first_charge_processed_at"
+    t.string "status"
   end
 
   create_table "old_passwords", force: :cascade do |t|
@@ -96,7 +94,7 @@ ActiveRecord::Schema.define(version: 2019_04_10_230455) do
     t.string "email"
     t.string "payment_processor"
     t.integer "is_prepaid"
-    t.jsonb "raw_line_items"
+    t.jsonb "line_items"
     t.jsonb "shipping_address"
     t.decimal "total_price", precision: 10, scale: 2
     t.jsonb "billing_address"

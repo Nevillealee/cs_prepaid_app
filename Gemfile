@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -29,18 +31,22 @@ gem 'jquery-rails'
 # documentation generation tool for ruby
 gem 'yard'
 # Backround job support
-gem 'redis'
+gem 'redis-rails'
 gem 'resque', require: 'resque/server'
 # bulk import supprt for activerecord
 gem 'activerecord-import'
 # http client
 gem 'httparty'
+# concurrent http request support
+gem 'typhoeus'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 3.8'
   gem 'dotenv-rails',  require: 'dotenv/rails-now'
+  # ruby community styleguide analyzer/formatter
+  gem 'rubocop', require: false
 end
 
 group :development do

@@ -1,9 +1,9 @@
-# loads custom tasks provided in resque gem
-Dir["#{Rails.root}/app/services/*.rb"].each { |file| require file }
-require "resque/tasks"
+# frozen_string_literal: true
+
+require 'resque/tasks'
 # load up rails environment so we have access to
 # all models inside of our workers
-task "resque:setup" => :environment
+task 'resque:setup' => :environment
 
 # desc 'Request from API and persist all shopify customer data'
 # task :pull_shopify_cust => :environment do
@@ -12,7 +12,7 @@ task "resque:setup" => :environment
 #   GetDataAPI.save_all_shopify_customers
 # end
 #
-# desc 'remove prospect tag from active subscribers'
-# task :remove_prospect => :environment do
-#   GetDataAPI.remove_prospect
-# end
+desc 'import redis data'
+task 'batch_upsert' => :environment do |t, args|
+  Synchronize.perform(*args)
+end
