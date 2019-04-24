@@ -25,6 +25,7 @@ module Requestable
     cache = $redis
     pages = []
     batch_num.times do
+      entity_url = entity.pluralize
       if remain_requests > BATCH_SIZE
         chap_end += BATCH_SIZE
         remain_requests -= BATCH_SIZE
@@ -36,7 +37,7 @@ module Requestable
         pages << page
         # queue up current batch
         request = Typhoeus::Request.new(
-          "https://api.rechargeapps.com/#{entity}s?#{params[:query]}&limit=250&page=#{page}",
+          "https://api.rechargeapps.com/#{entity_url}?#{params[:query]}&limit=250&page=#{page}",
           # followlocation: true,
           headers: HEADER
         )
@@ -70,16 +71,18 @@ module Requestable
       batch_throttle(@used)
     end
     Resque.logger.debug "Pages iterated: #{pages.inspect}"
-    # cache.flatten!
     Resque.logger.info("RUN TIME per #{total} records: #{(Time.now - past)}")
-    # Resque.logger.info "cache has #{cache.size} hashes"
-    # return cache
   end
 
+  # requests entity count from ReCharge API
+  #
+  # @note query string example: "scheduled_at_min=2018-04-02&scheduled_at_max=2018-05-18"
+  # @params args [Hash<Symbol, String>] query -> query string arguements, entity -> object requested
+  # @return [Integer] number of objects fitting query
   def api_count(args)
     query_str = args[:query]
-    object_name = args[:entity]
-    my_response = HTTParty.get("https://api.rechargeapps.com/#{object_name}s/count?#{query_str}",
+    object_name = args[:entity].pluralize
+    my_response = HTTParty.get("https://api.rechargeapps.com/#{object_name}/count?#{query_str}",
                                 headers: HEADER)
     my_count = my_response['count'].to_i
     Resque.logger.info "#{my_count} #{object_name}'s on Recharge API"
@@ -88,14 +91,13 @@ module Requestable
   end
 
   def batch_throttle(requests_used)
-    if requests_used > 20
-      puts 'sleeping 20'
+    if requests_used > 20 && requests_used < 39
+      Resque.logger.debug "requests used: #{requests_used}, sleeping 10..."
       sleep 10
+    else
+      Resque.logger.debug "requests used: #{requests_used}, sleeping 19..."
+      sleep 19
     end
-  end
-  # return class name (matched with api objects) for http arguement interpolation
-  def entity_name
-    self.is_a?(Module) ? name.downcase : self.class.name.downcase
   end
 
   def hash_get_key_field(key)

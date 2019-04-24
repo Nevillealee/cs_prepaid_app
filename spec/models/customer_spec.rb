@@ -20,7 +20,7 @@ RSpec.describe Customer, type: :model do
     let(:q_params) { { query: "updated_at_min=#{min}&updated_at_max=#{max}",
                        entity: 'customer' } }
 
-     describe '.fetch', focus: true do
+     describe '.fetch' do
        it 'batch requests ReCharge customers' do
          expect(customer.fetch(q_params)).to eq(true)
        end

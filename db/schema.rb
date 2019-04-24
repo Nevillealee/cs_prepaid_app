@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_04_23_220446) do
+ActiveRecord::Schema.define(version: 2019_04_24_182730) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,10 +129,9 @@ ActiveRecord::Schema.define(version: 2019_04_23_220446) do
     t.jsonb "properties"
     t.integer "expire_after_specific_number_of_charges"
     t.string "cancellation_reason"
-    t.string "cancellation_reason_comment"
+    t.string "cancellation_reason_comments"
     t.integer "max_retries_reached"
     t.integer "has_queued_charges"
-    t.boolean "commit_update"
     t.index ["address_id"], name: "index_subscriptions_on_address_id"
     t.index ["customer_id"], name: "index_subscriptions_on_customer_id"
   end

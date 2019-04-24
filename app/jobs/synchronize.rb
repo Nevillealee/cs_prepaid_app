@@ -8,6 +8,8 @@ class Synchronize < ActiveRecord::Base
   Resque.logger = Logger.new(STDOUT)
   extend Requestable
 
+  # batch upserts redis hashes into database
+  # @params arg [String] command line model name argument from rake task
   def self.perform(arg)
     Resque.logger.debug "Synchronize.perform params recieved: #{arg.inspect}"
     @entity = arg
@@ -22,24 +24,25 @@ class Synchronize < ActiveRecord::Base
     # converts parent_hash from Hash with {'redis hset field' keys => 'recharge json responses'} into
     # array of ruby Hashes representing individual Recharge objects (orders, customers, etc..)
     parent_hash.try(:each) { |val| temp << JSON.parse(val[1])["#{@entity}s"] }
-    my_hashes = temp.flatten
-    Resque.logger.debug "#{@entity}s in redis before import: #{my_hashes.size}"
+    # my_hashes = temp.flatten
+    Resque.logger.debug "#{@entity} batches in redis before import: #{temp.size}"
     # active-import columns to save
-    ActiveRecord::Base.connection.disable_referential_integrity do
-      results = my_class.import(my_columns,
-                                my_hashes,
-                                batch_size: 10000,
-                                returning: :id,
-                                on_duplicate_key_update: :all
-                              )
-      puts "inserts: #{results.num_inserts}"
-      # puts "Successful #{@entity}_ids: #{results.results}"
-      puts "#{@entity}s now in DB: #{my_class.count(:all)}"
-      puts "fails: #{results.failed_instances}"
+    temp.try(:each) do |my_hashes|
+      ActiveRecord::Base.connection.disable_referential_integrity do
+        results = my_class.import(my_columns,
+                                  my_hashes,
+                                  batch_size: 10000,
+                                  # returning: :id,
+                                  on_duplicate_key_update: :id
+                                )
+      end
     end
+    puts "#{@entity}s now in DB: #{my_class.count(:all)}"
   end
-
-  # columns auto_generated, if external api changes keys, write out columns to import explicitly
+  # creates an array of table columns for active import
+  #
+  # @param ent [String] the model's columns needed
+  # @return [Array<String>] the corresponding table's fields
   def self.import_columns(ent)
     case ent
     when 'order'

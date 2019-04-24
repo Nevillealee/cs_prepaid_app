@@ -32,11 +32,14 @@ class Harvest < ActiveRecord::Base
     max = minn_maxx[:max]
     case ent
     when 'customer'
-      return { query: "status=active", entity: ent }
+      return { query: 'status=active', entity: ent }
     when 'order'
-      return { query: "scheduled_at_min=#{min}&scheduled_at_max=#{max}", entity: ent }
+      return { query: "scheduled_at_min=2018-01-01", entity: ent } #CS needs order history for customer inquiry
+      # return { query: "scheduled_at_min=#{min}&scheduled_at_max=#{max}", entity: ent }
     when 'address'
+      return { query: "created_at_max=#{Date.today.strftime('%Y-%m-%d')}", entity: ent}
     when 'subscription'
+      return { query: 'status=active', entity: ent }
     when 'order_line_item'
     else
       Resque.logger "rake task argument: #{ent} is invalid!!!"

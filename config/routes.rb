@@ -3,10 +3,11 @@
 Rails.application.routes.draw do
   # root 'dashboards#index'
   devise_for :users, controllers: { registrations: 'users/registrations'  }
+  resource :customers, only: [:index, :search, :show]
 
   devise_scope :user do
     authenticated do
-      root 'dashboards#index', as: :authenticated_root
+      root 'customer#index', as: :authenticated_root
     end
 
     unauthenticated do
@@ -14,4 +15,7 @@ Rails.application.routes.draw do
     end
   end
   resources :users
+  namespace :customer do
+    resources :orders, only: [:show, :edit, :update]
+  end
 end
