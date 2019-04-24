@@ -16,3 +16,8 @@ desc 'import redis data'
 task 'batch_upsert' => :environment do |t, args|
   Synchronize.perform(*args)
 end
+
+desc 'import recharge data'
+task 'batch_request' => :environment do |t, args|
+  Harvest.perform(*args)
+end

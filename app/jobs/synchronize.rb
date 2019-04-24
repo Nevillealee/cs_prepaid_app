@@ -43,7 +43,7 @@ class Synchronize < ActiveRecord::Base
   def self.import_columns(ent)
     case ent
     when 'order'
-      return %w{ id customer_id address_id charge_id transaction_id shopify_order_id
+      return %w{ id customer_id address_id charge_id transaction_id shopify_order_id shopify_order_number
                  processed_at status first_name last_name email payment_processor scheduled_at
                  is_prepaid line_items shipping_address total_price billing_address created_at
                  updated_at }
