@@ -57,10 +57,7 @@ module Requestable
         request.on_success do |res|
           @used = res.headers['x-recharge-limit'].to_i
           Resque.logger.debug res.headers['x-recharge-limit']
-          # REDIS HGET -> e.g. order_pull:20190422:001"
-          # key=order_pull:20190422, field= 3 digit page num: "001-250"
           key = "#{entity}_pull:#{Time.now.strftime("%Y%m%d")}#{page.to_s.rjust(3, '0')}"
-          # cache array of entitys as json in REDIS
           hash_set(cache, key, res.response_body)
         end
 
@@ -101,12 +98,12 @@ module Requestable
   end
 
   def hash_get_key_field(key)
-    s = key.split(":")
+    s = key.split(':')
     puts "s = #{s}"
     if s[1].length > 3
-        {:key => s[0]+":"+s[1][0..-4], :field => s[1][-3..-1]}
+        {:key => s[0]+':'+s[1][0..-4], :field => s[1][-3..-1]}
     else
-        {:key => s[0]+":", :field => s[1]}
+        {:key => s[0]+':', :field => s[1]}
     end
   end
 
