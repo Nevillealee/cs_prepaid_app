@@ -33,6 +33,7 @@ module Requestable
         chap_end += remain_requests
       end
       hydra = Typhoeus::Hydra.new(max_concurrency: 20)
+
       chap_start.upto(chap_end) do |page|
         pages << page
         # queue up current batch
@@ -91,7 +92,7 @@ module Requestable
     if requests_used > 20 && requests_used < 39
       Resque.logger.debug "requests used: #{requests_used}, sleeping 10..."
       sleep 10
-    else
+    elsif requests_used >= 39
       Resque.logger.debug "requests used: #{requests_used}, sleeping 19..."
       sleep 19
     end
@@ -125,5 +126,4 @@ module Requestable
     r = $redis
     r.hgetall(key)
   end
-
 end
