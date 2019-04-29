@@ -8,9 +8,9 @@ class Customer < ApplicationRecord
   has_many :orders
 
   def self.search(params)
-    params[:q].strip!
-    if !/\A\d+\z/.match(params[:q])
-      queries = params[:q].split(' ')
+    my_query = params[:q].strip
+    if /^[a-zA-Z ]*$/.match(my_query)
+      queries = my_query.split(' ')
       if queries.size > 1
         where("first_name ilike ? AND last_name ilike ?", "%#{queries[0]}%", "%#{queries[1]}%").order(first_name: :asc)
       else
@@ -18,8 +18,8 @@ class Customer < ApplicationRecord
           "%#{queries[0]}%", "%#{queries[0]}%", "%#{queries[0]}%"
         ).order(first_name: :asc)
       end
-    elsif /\A\d+\z/.match(params[:q])
-      where("shopify_customer_id = ? OR id = ?", "#{params[:q]}", "#{params[:q]}").order(first_name: :asc)
+    elsif /^[\d\s]+$/.match(my_query)
+      where("shopify_customer_id = ? OR id = ?", "#{my_query}", "#{my_query}").order(first_name: :asc)
     else
       order(first_name: :asc)
     end

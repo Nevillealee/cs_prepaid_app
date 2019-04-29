@@ -19,7 +19,7 @@ RSpec.describe Synchronize, type: :model do
 
   context 'Orders' do
     describe '.batch_upsert' do
-      it 'saves responses in redis cache', focus: true do
+      it 'saves responses in redis cache' do
         Harvest.perform('order')
         my_four_months = Date.today >> 4
         my_four_months = my_four_months.end_of_month
