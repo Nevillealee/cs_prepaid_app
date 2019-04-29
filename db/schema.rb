@@ -50,15 +50,6 @@ ActiveRecord::Schema.define(version: 2019_04_24_182730) do
     t.string "status"
   end
 
-  create_table "old_passwords", force: :cascade do |t|
-    t.string "encrypted_password", null: false
-    t.string "password_archivable_type", null: false
-    t.integer "password_archivable_id", null: false
-    t.string "password_salt"
-    t.datetime "created_at"
-    t.index ["password_archivable_type", "password_archivable_id"], name: "index_password_archivable"
-  end
-
   create_table "order_line_items", force: :cascade do |t|
     t.bigint "order_id"
     t.bigint "subscription_id"
@@ -154,6 +145,7 @@ ActiveRecord::Schema.define(version: 2019_04_24_182730) do
     t.datetime "confirmed_at"
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
+    t.datetime "password_changed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
