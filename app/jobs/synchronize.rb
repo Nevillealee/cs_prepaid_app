@@ -29,17 +29,9 @@ class Synchronize < ActiveRecord::Base
     Resque.logger.debug "#{@entity} batches in redis before import: #{temp.size}"
     # active-import columns to save
     temp.try(:each) do |my_hashes|
-      t = Thread.new do
-        ActiveRecord::Base.connection.disable_referential_integrity do
-          results = my_class.import(my_columns,
-                                    my_hashes,
-                                    batch_size: 10000,
-                                    # returning: :id,
-                                    on_duplicate_key_update: :all
-                                  )
-        end
+      ActiveRecord::Base.connection.disable_referential_integrity do
+        my_class.import(my_columns, my_hashes, batch_size: 10000, on_duplicate_key_update: :all)
       end
-      t.join 
     end
     puts "#{@entity}s now in DB: #{my_class.count(:all)}"
   end

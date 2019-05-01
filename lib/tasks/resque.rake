@@ -17,7 +17,7 @@ task 'batch_upsert' => :environment do |t, args|
   Synchronize.perform(*args)
 end
 
-desc 'import recharge data'
+desc 'import recharge data [customer || address || subscription || order]'
 task 'batch_request' => :environment do |t, args|
   Harvest.perform(*args)
 end
