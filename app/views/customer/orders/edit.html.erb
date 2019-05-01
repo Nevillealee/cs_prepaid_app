@@ -1,0 +1,17 @@
+<p>please wrap table in a form (if it makes sense, im following recharges site)
+  and have the form send a PATCH request using customer_order_path as a url
+</p>
+
+<table class="table">
+  <tbody>
+    <% @order.line_items.each do |pair| %>
+      <tr>
+        <% pair.each do |key, value| %>
+          <td><%= key %></td>
+          <td><%= value %></td>
+          <td>delete icon</td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

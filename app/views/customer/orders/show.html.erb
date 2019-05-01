@@ -1,0 +1,24 @@
+<h3> List order for specific customer here </h3>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Order</th>
+      <th>Date</th>
+      <th>Total</th>
+      <th>Transaction Status</th>
+      <th>Line_Items</th>
+      <th colspan="6"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr>
+      <td><%= @order.id %></td>
+      <td><%= @order.scheduled_at %></td>
+      <td>$<%= @order.total_price %></td>
+      <td><%= @order.status %></td>
+      <td><%= @order.line_items %></td>
+      <td><%= link_to "Edit line items", edit_customer_order_path(@order) %></td>
+    </tr>
+  </tbody>
+</table>
