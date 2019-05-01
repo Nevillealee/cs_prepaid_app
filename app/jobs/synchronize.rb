@@ -28,8 +28,7 @@ class Synchronize < ActiveRecord::Base
     # my_hashes = temp.flatten
     Resque.logger.debug "#{@entity} batches in redis before import: #{temp.size}"
     # active-import columns to save
-    temp.try(:each) do |my_hashes|
-      t = Thread.new do
+    temp.each do |my_hashes|
         ActiveRecord::Base.connection.disable_referential_integrity do
           results = my_class.import(my_columns,
                                     my_hashes,
@@ -38,8 +37,6 @@ class Synchronize < ActiveRecord::Base
                                     on_duplicate_key_update: :all
                                   )
         end
-      end
-      t.join 
     end
     puts "#{@entity}s now in DB: #{my_class.count(:all)}"
   end
