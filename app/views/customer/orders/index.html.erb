@@ -1,0 +1,26 @@
+<table class="table">
+  <thead>
+    <tr>
+      <th>Order</th>
+      <th>Date</th>
+      <th>Total</th>
+      <th>Transaction Status</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @orders.each do |order| %>
+      <tr>
+        <td>
+          <%= link_to customer_order_path(order) do %>
+          <%= order.id %>
+          <% end %>
+        </td>
+        <td><%= order.scheduled_at %></td>
+        <td>$<%= order.total_price %></td>
+        <td><%= order.status %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

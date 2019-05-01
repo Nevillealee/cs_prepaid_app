@@ -23,9 +23,9 @@ RSpec.describe Customer, type: :model do
          expect(customer.fetch(q_params)).to eq(true)
        end
      end
-   end
+  end
 
-  context '#search', focus: true do
+  context '#search' do
     before(:each) do
       5.times do
         FactoryBot.create(:customer)
@@ -63,7 +63,7 @@ RSpec.describe Customer, type: :model do
      end
      context 'when special characters entered' do
        it 'returns all customers' do
-         params = { q: '@$#1*3$^%*#@(@$(21)' }
+         params = { q: '@$#*$^%*#@(@$()+_-=~``' }
          results = Customer.search(params)
          expect(results).to eq(Customer.order(first_name: :asc))
        end

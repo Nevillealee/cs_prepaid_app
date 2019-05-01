@@ -2,8 +2,8 @@
 
 class Order < ApplicationRecord
   include Requestable
-  
-  has_many :line_items
+
+  has_many :order_line_items
   # i.e. order contains multiple recurring subscriptions purchased at once
   has_many :subscriptions, through: :order_line_items
   belongs_to :customer

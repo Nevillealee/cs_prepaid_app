@@ -47,6 +47,7 @@ group :development, :test do
   gem 'dotenv-rails',  require: 'dotenv/rails-now'
   # ruby community styleguide analyzer/formatter
   gem 'rubocop', require: false
+  gem 'resque_spec'
 end
 
 group :development do
