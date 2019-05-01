@@ -1,11 +1,11 @@
 <h3>
-  mirrors  https://ellieactive.myshopify.com/admin/apps/shopify-recurring-payments/customers
+  Customers
 </h3>
-<div class='container-flex'>
+<div class='container-flex customer-view-wrapper'>
   <%= form_tag(customer_search_path, {method: :get, class: 'form-inline', enforce_utf8: false}) do %>
-    <div class='form-group'>
+    <div class='form-group customer-search-wrapper'>
       <%= search_field_tag :q, params[:q], class: 'form-control', placeholder: 'Enter customer info' %>
-      <%= submit_tag 'Search', { name: nil, class: 'btn btn-outline-success my-2 my-sm-0' } %>
+      <%= submit_tag 'Search', { name: nil, class: 'btn btn-info my-2 my-sm-0' } %>
     </div>
   <% end %>
   <table class="table">
@@ -21,7 +21,7 @@
     <tbody>
       <% @customers.each do |cust| %>
         <tr>
-          <td><%= cust.first_name %> <%= cust.last_name %></td>
+          <td><%= cust.first_name.capitalize %> <%= cust.last_name.capitalize %></td>
           <td><%= cust.email %></td>
           <td><%= cust.shopify_customer_id %></td>
         </tr>

@@ -11,7 +11,7 @@
   <body>
     <% if user_signed_in? %>
       <!-- MAIN NAV START -->
-      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <%= link_to "ReCharge Prepaid Portal", authenticated_root_path, class: 'navbar-brand' %>
         <ul class="nav">
           <% if current_user.try(:admin?) %>
