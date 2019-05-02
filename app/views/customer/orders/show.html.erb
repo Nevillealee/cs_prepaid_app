@@ -1,5 +1,5 @@
 <h3> List order for specific customer here </h3>
-<table class="table">
+<table class="table order-show-wrapper">
   <thead>
     <tr>
       <th>Order</th>
@@ -17,7 +17,16 @@
       <td><%= @order.scheduled_at %></td>
       <td>$<%= @order.total_price %></td>
       <td><%= @order.status %></td>
-      <td><%= @order.line_items %></td>
+      <td>
+        <img src="<%= @order.line_items[0]['images']['small'] %>"/>
+        <%= @order.line_items[0]['title'] %> <br />
+        Quantity: <%= @order.line_items[0]['quantity'] %> <br />
+        Leggings: <%= @order.line_items[0]['properties'][2]['value'] %><br />
+        Sports Bra: <%= @order.line_items[0]['properties'][8]['value'] %><br />
+        Tops: <%= @order.line_items[0]['properties'][9]['value'] %><br />
+        Product Collection: <%= @order.line_items[0]['properties'][4]['value'] %><br />
+        
+      </td>
       <td><%= link_to "Edit line items", edit_customer_order_path(@order) %></td>
     </tr>
   </tbody>

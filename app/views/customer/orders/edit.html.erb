@@ -1,22 +1,19 @@
-<p>please wrap table in a form (if it makes sense, im following recharges site)
-  and have the form send a PATCH request using customer_order_path as a url
-</p>
+<div class="edit-line-item-properties-wrapper">
+  <h3>Edit Line Item Properties</h3>
 
-<div class="container">
-  <%= form_for :order, as: :post, url: customer_order_path(@order), method: :patch do |f| %>
+  <%= form_for @order, as: :post, url: customer_order_path(@order), method: :patch do |f| %>
     <table class="table">
       <tbody>
-        <% @order.line_items.each do |pair| %>
-          <% pair.each do |key, value| %>
+        <% @order.line_items[0]['properties'].each do |pair| %>
             <tr>
-              <td> <%= key %></td>
-              <td><%= value %></td>
-              <td>delete icon</td>
+              <td><%= pair['name'].capitalize %></td>
+              <td>
+                <input value="<%= pair['value'] %>" type="text" name="<%= pair['name'] %>" class="form-control">
+              </td>
             </tr>
-          <% end %>
         <% end %>
       </tbody>
     </table>
-    <%= f.submit %>
+    <%= f.submit 'Update', :class => 'btn btn-info' %>
   <% end %>
 </div>
