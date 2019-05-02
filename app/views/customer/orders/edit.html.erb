@@ -2,16 +2,21 @@
   and have the form send a PATCH request using customer_order_path as a url
 </p>
 
-<table class="table">
-  <tbody>
-    <% @order.line_items.each do |pair| %>
-      <tr>
-        <% pair.each do |key, value| %>
-          <td><%= key %></td>
-          <td><%= value %></td>
-          <td>delete icon</td>
+<div class="container">
+  <%= form_for :order, as: :post, url: customer_order_path(@order), method: :patch do |f| %>
+    <table class="table">
+      <tbody>
+        <% @order.line_items.each do |pair| %>
+          <% pair.each do |key, value| %>
+            <tr>
+              <td> <%= key %></td>
+              <td><%= value %></td>
+              <td>delete icon</td>
+            </tr>
+          <% end %>
         <% end %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+      </tbody>
+    </table>
+    <%= f.submit %>
+  <% end %>
+</div>
