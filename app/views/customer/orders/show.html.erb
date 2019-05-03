@@ -2,7 +2,7 @@
 <table class="table order-show-wrapper">
   <thead>
     <tr>
-      <th>Order</th>
+      <th>Order #</th>
       <th>Date</th>
       <th>Total</th>
       <th>Transaction Status</th>
@@ -14,11 +14,12 @@
   <tbody>
     <tr>
       <td><%= @order.id %></td>
-      <td><%= @order.scheduled_at %></td>
-      <td>$<%= @order.total_price %></td>
+      <td><%= @order.scheduled_at.strftime('%B %d, %Y') %></td>
+      <td><%= number_to_currency(@order.total_price) %></td>
       <td><%= @order.status %></td>
       <td>
         <% @order.line_items.each do |line_item| %>
+
           <% if line_item.has_key?('images') %>
             <img src="<%= @order.line_items[0]['images']['small'] %>"/>
           <% end %>
@@ -39,8 +40,8 @@
               <% end %>
             <% end %>
         <% end %>
+        <%= link_to "Edit line items", edit_customer_order_path(@order) %>
       </td>
-      <td><%= link_to "Edit line items", edit_customer_order_path(@order) %></td>
     </tr>
   </tbody>
 </table>

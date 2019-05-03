@@ -18,14 +18,13 @@
 
         <% @order.line_items[0].each do |key, value| %>
           <% if key != 'properties' %>
-            <tr>
+            <tr style="display:none;">
               <td>
-                <input value="<%= key %>" type="text" name="<%= key %>" class="form-control">
+                <input value="<%= key %>" type="hidden" name="<%= key %>" class="form-control">
               </td>
               <td>
-                <input value="<%= value %>" type="text" name="<%= key %>" class="form-control">
+                <input value="<%= value %>" type="hidden" name="<%= key %>" class="form-control">
               </td>
-              <!--  insert hidden input for other line_item_properties -->
             </tr>
 
 

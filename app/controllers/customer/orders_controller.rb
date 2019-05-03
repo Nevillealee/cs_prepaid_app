@@ -3,11 +3,11 @@ class Customer::OrdersController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    @orders = Order.where(customer_id: params[:customer_id])
+    @orders = Order.where(customer_id: params[:customer_id],  status: "QUEUED")
   end
 
   def show
-    @order = Order.find(params[:id])
+    @order = Order.find_by(id: params[:id], status: "QUEUED")
   end
 
   def edit
