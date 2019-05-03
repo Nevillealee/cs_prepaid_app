@@ -6,9 +6,9 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # prevents already signed in error when creating user as admin user
   # skip_before_action :require_no_authentication
   # overwrites Devise helper method so that new user isnt automatically signed in
-  # def sign_up(resource_name, resource)
-  #   true
-  # end
+  def sign_up(resource_name, resource)
+    true
+  end
 
   protected
   # If you have extra params to permit, append them to the sanitizer.

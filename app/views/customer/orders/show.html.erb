@@ -18,14 +18,27 @@
       <td>$<%= @order.total_price %></td>
       <td><%= @order.status %></td>
       <td>
-        <img src="<%= @order.line_items[0]['images']['small'] %>"/>
-        <%= @order.line_items[0]['title'] %> <br />
-        Quantity: <%= @order.line_items[0]['quantity'] %> <br />
-        Leggings: <%= @order.line_items[0]['properties'][2]['value'] %><br />
-        Sports Bra: <%= @order.line_items[0]['properties'][8]['value'] %><br />
-        Tops: <%= @order.line_items[0]['properties'][9]['value'] %><br />
-        Product Collection: <%= @order.line_items[0]['properties'][4]['value'] %><br />
-        
+        <% @order.line_items.each do |line_item| %>
+          <% if line_item.has_key?('images') %>
+            <img src="<%= @order.line_items[0]['images']['small'] %>"/>
+          <% end %>
+          <%= @order.line_items[0]['title'] %> <br />
+          Quantity: <%= line_item['quantity'] %> <br />
+            <% line_item['properties'].each do |prop| %>
+              <% if prop.has_value?('leggings') %>
+                Leggings: <%= prop['value'] %><br />
+              <% end %>
+              <% if prop.has_value?('sports-bra') %>
+                Sports Bra: <%= prop['value'] %><br />
+              <% end %>
+              <% if prop.has_value?('tops') %>
+                Tops: <%= prop['value'] %><br />
+              <% end %>
+              <% if prop.has_value?('product_collection') %>
+                Product Collection: <%= prop['value'] %><br />
+              <% end %>
+            <% end %>
+        <% end %>
       </td>
       <td><%= link_to "Edit line items", edit_customer_order_path(@order) %></td>
     </tr>
