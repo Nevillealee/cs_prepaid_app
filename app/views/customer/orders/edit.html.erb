@@ -6,14 +6,36 @@
       <tbody>
         <% @order.line_items[0]['properties'].each do |pair| %>
             <tr>
-              <td><%= pair['name'].capitalize %></td>
               <td>
-                <input value="<%= pair['value'] %>" type="text" name="<%= pair['name'] %>" class="form-control">
+                <input value="properties['<%= pair['name'] %>']" type="text" name="properties['<%= pair['name'] %>']" class="form-control">
+              </td>
+              <td>
+                <input value="<%= pair['value'] %>" type="text" name="properties['<%= pair['name'] %>']" class="form-control">
               </td>
             </tr>
         <% end %>
+
+
+        <% @order.line_items[0].each do |key, value| %>
+          <% if key != 'properties' %>
+            <tr>
+              <td>
+                <input value="<%= key %>" type="text" name="<%= key %>" class="form-control">
+              </td>
+              <td>
+                <input value="<%= value %>" type="text" name="<%= key %>" class="form-control">
+              </td>
+            </tr>
+
+
+          <% end %>
+
+        <% end %>
+
       </tbody>
     </table>
     <%= f.submit 'Update', :class => 'btn btn-info' %>
   <% end %>
 </div>
+
+<div class="spacer"></div>

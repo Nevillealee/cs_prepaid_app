@@ -18,6 +18,7 @@ class Customer::OrdersController < ApplicationController
   # activates if order.exists?
   def update
     @order = Order.find(params[:id])
+    puts order_params
     if true # @order.update_attributes(order_params)
       ext_update(order_params)
     else
