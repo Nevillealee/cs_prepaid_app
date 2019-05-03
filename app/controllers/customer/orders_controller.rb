@@ -18,6 +18,7 @@ class Customer::OrdersController < ApplicationController
   # activates if order.exists?
   def update
     @order = Order.find(params[:id])
+    puts params.inspect
     # if true
     #    @order.update_attributes(order_params)
     #   ext_update(order_params)
@@ -30,7 +31,7 @@ class Customer::OrdersController < ApplicationController
   private
 
   def order_params
-    params.require(:order).permit(:id, :customer_id, :line_items)
+    params.require(:properties).permit(:id, :customer_id, :properties)
   end
 
   def ext_update(arg)

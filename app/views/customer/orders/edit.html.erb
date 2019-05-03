@@ -1,16 +1,16 @@
 <div class="edit-line-item-properties-wrapper">
   <h3>Edit Line Item Properties</h3>
 
-  <%= form_for @order, as: :post, url: customer_order_path(@order), method: :patch do |f| %>
+  <%= form_for @order, as: :line_items, url: customer_order_path(@order), method: :patch do |f| %>
     <table class="table">
       <tbody>
         <% @order.line_items[0]['properties'].each do |pair| %>
             <tr>
               <td>
-                <input value="properties['<%= pair['name'] %>']" type="text" name="properties['<%= pair['name'] %>']" class="form-control">
+                <%= f.text_field pair['name'], value: pair['name'], html: {class: "form-control"} %>
               </td>
               <td>
-                <input value="<%= pair['value'] %>" type="text" name="properties['<%= pair['name'] %>']" class="form-control">
+                <%= f.text_field pair['name'], value: pair['value'], html: {class: "form-control"} %>
               </td>
             </tr>
         <% end %>
@@ -26,12 +26,8 @@
                 <input value="<%= value %>" type="hidden" name="<%= key %>" class="form-control">
               </td>
             </tr>
-
-
           <% end %>
-
         <% end %>
-
       </tbody>
     </table>
     <%= f.submit 'Update', :class => 'btn btn-info' %>
