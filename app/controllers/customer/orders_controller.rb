@@ -18,20 +18,50 @@ class Customer::OrdersController < ApplicationController
   # activates if order.exists?
   def update
     @order = Order.find(params[:id])
-    puts params.inspect
-    # if true
-    #    @order.update_attributes(order_params)
-    #   ext_update(order_params)
-    # else
-    #   render 'edit'
-    # end
-    render 'edit'
+    if true # @order.update_attributes(order_params)
+      all_params = {line_items: line_item_params,
+                    prop_params: properties_params,
+                    order_id: params[:id],
+                   }
+      ext_update(all_params)
+    else
+      render 'edit'
+    end
   end
 
   private
 
-  def order_params
-    params.require(:properties).permit(:id, :customer_id, :properties)
+  def line_item_params
+    params.require(:line_items).permit(
+      :sku,
+      :grams,
+      :price,
+      :title,
+      :images,
+      :quantity,
+      :product_title,
+      :variant_title,
+      :subscription_id,
+      :shopify_product_id,
+      :shopify_variant_id
+    )
+  end
+
+  def properties_params
+    params.require(:properties).permit(
+      :charge_interval_frequency,
+      :charge_interval_unit_type,
+      :gloves,
+      :leggings,
+      :"main-product",
+      :product_collection,
+      :product_id,
+      :referrer,
+      :shipping_interval_frequency,
+      :shipping_interval_unit_type,
+      :"sports-bra",
+      :tops
+    )
   end
 
   def ext_update(arg)
