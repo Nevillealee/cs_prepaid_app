@@ -3,6 +3,7 @@
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'users/registrations'  }
   resources :customers, only: [:index, :show]
+  get 'customer/orders/:id/size_edit', action: :size_edit, controller: 'customer/orders', as: :edit_customer_order_sizes
 
   devise_scope :user do
     authenticated do
@@ -17,5 +18,6 @@ Rails.application.routes.draw do
   resources :users
   namespace :customer do
     resources :orders, only: [:index, :show, :edit, :update]
+    patch 'orders/size_edit/:id', to: 'orders#size_update', as: :order_sizes
   end
 end

@@ -13,7 +13,7 @@
       <tr>
         <td>
           <%= link_to customer_order_path(order) do %>
-          <%= order.id %>
+            <%= order.id %>
           <% end %>
         </td>
         <td><%= order.scheduled_at.strftime('%B %d, %Y')  %></td>

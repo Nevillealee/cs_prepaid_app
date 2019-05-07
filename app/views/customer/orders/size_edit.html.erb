@@ -1,13 +1,12 @@
-<div class="edit-line-item-properties-wrapper">
-  <h1>Edit Line Item Properties</h1>
-  <p>For switching collections, please only update the "product_collection" field.</p>
-
-  <%= form_for @order, as: :properties, url: customer_order_path(@order), method: :patch do |f| %>
+<div class="edit-sizes-form-wrapper">
+  <h1>Edit Sizes</h1>
+  <p>Order: <%= @order.id %></p>
+  <%= form_for @order, url: customer_order_sizes_path(@order), method: :patch do |f| %>
     <table class="table">
       <tbody>
         <% @order.line_items[0]['properties'].each do |pair| %>
           <% if pair['name'] == 'leggings' || pair['name'] == 'sports-bra' || pair['name'] == 'tops' || pair['name'] == 'gloves' || pair['name'] == 'sports-jacket' %>
-            <tr style="display: none;">
+            <tr>
               <td>
                 <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
               </td>
@@ -16,7 +15,7 @@
               </td>
             </tr>
           <% else %>
-            <tr>
+            <tr style="display: none;">
               <td>
                 <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
               </td>
@@ -41,8 +40,6 @@
         <% end %>
       </tbody>
     </table>
-    <%= f.submit 'Update', :class => 'btn btn-info' %>
+    <%= f.submit 'Update Sizes', :class => 'btn btn-info' %>
   <% end %>
 </div>
-
-<div class="spacer"></div>
