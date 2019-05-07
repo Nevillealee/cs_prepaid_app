@@ -7,10 +7,10 @@
         <% @order.line_items[0]['properties'].each do |pair| %>
             <tr>
               <td>
-                <%= f.text_field pair['name'], value: pair['name'], html: {class: "form-control"} %>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
               </td>
               <td>
-                <%= f.text_field pair['name'], value: pair['value'], html: {class: "form-control"} %>
+                <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
               </td>
             </tr>
         <% end %>
