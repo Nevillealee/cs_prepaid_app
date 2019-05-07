@@ -7,7 +7,7 @@ class OrderUpdate
 
   def self.perform(params)
     recharge_token = ENV['RECHARGE_STAGING_TOKEN']
-    recharge_change_header = {
+    @recharge_change_header = {
       'X-Recharge-Access-Token' => recharge_token,
       'Accept' => 'application/json',
       'Content-Type' => 'application/json'
@@ -34,7 +34,7 @@ class OrderUpdate
 
     # When updating line_items, you need to provide all the data that was in
     # line_items before, otherwise only new parameters will remain! (from Recharge docs)
-    recharge_response = HTTParty.put("https://api.rechargeapps.com/orders/#{my_order_id}", :headers => recharge_change_header, :body => body, :timeout => 80)
+    recharge_response = HTTParty.put("https://api.rechargeapps.com/orders/#{my_order_id}", :headers => @recharge_change_header, :body => body, :timeout => 80)
     Resque.logger.info "MY RECHARGE RESPONSE: #{my_update_order.parsed_response}"
   end
 end

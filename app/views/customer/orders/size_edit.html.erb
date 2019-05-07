@@ -1,7 +1,7 @@
 <div class="edit-sizes-form-wrapper">
   <h1>Edit Sizes</h1>
   <p>Order: <%= @order.id %></p>
-  <%= form_for @order, url: customer_order_sizes_path(@order), method: :patch do |f| %>
+  <%= form_for @order, as: :properties, url: customer_order_sizes_path(@order), method: :patch do |f| %>
     <table class="table">
       <tbody>
         <% @order.line_items[0]['properties'].each do |pair| %>

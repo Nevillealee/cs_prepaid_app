@@ -39,6 +39,7 @@ gem 'activerecord-import'
 gem 'httparty'
 # concurrent http request support
 gem 'typhoeus'
+gem 'resque_spec'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -47,7 +48,6 @@ group :development, :test do
   gem 'dotenv-rails',  require: 'dotenv/rails-now'
   # ruby community styleguide analyzer/formatter
   gem 'rubocop', require: false
-  gem 'resque_spec'
 end
 
 group :development do

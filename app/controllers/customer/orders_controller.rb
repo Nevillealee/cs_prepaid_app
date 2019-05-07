@@ -23,7 +23,8 @@ class Customer::OrdersController < ApplicationController
                     prop_params: properties_params,
                     order_id: params[:id],
                    }
-      recharge_line_item_update(all_params)
+      # recharge_line_item_update(all_params)
+      Resque.enqueue(OrderUpdate, all_params)
     else
       render 'edit'
     end
@@ -41,6 +42,7 @@ class Customer::OrdersController < ApplicationController
                     order_id: params[:id],
                    }
       recharge_size_update(all_params)
+      redirect_back(fallback_location: root_path)
     else
       render 'size_edit'
     end
@@ -71,6 +73,7 @@ class Customer::OrdersController < ApplicationController
       :gloves,
       :leggings,
       :"main-product",
+      :"sports-jacket",
       :product_collection,
       :product_id,
       :referrer,
