@@ -1,10 +1,21 @@
 <div class="edit-line-item-properties-wrapper">
-  <h3>Edit Line Item Properties</h3>
+  <h1>Edit Line Item Properties</h1>
+  <p>For switching collections, please only update the "product_collection" field.</p>
 
   <%= form_for @order, as: :properties, url: customer_order_path(@order), method: :patch do |f| %>
     <table class="table">
       <tbody>
         <% @order.line_items[0]['properties'].each do |pair| %>
+          <% if pair['name'] == 'leggings' || pair['name'] == 'sports-bra' || pair['name'] == 'tops' || pair['name'] == 'gloves' || pair['name'] == 'sports-jacket' %>
+            <tr style="display: none;">
+              <td>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
+              </td>
+              <td>
+                <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
+              </td>
+            </tr>
+          <% else %>
             <tr>
               <td>
                 <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
@@ -13,6 +24,7 @@
                 <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
               </td>
             </tr>
+          <% end %>
         <% end %>
 
         <% @order.line_items[0].each do |key, value| %>

@@ -1,5 +1,45 @@
-<h1>edit size form</h1>
+<div class="edit-sizes-form-wrapper">
+  <h1>Edit Sizes</h1>
+  <p>Order: <%= @order.id %></p>
+  <%= form_for @order, url: customer_order_sizes_path(@order), method: :patch do |f| %>
+    <table class="table">
+      <tbody>
+        <% @order.line_items[0]['properties'].each do |pair| %>
+          <% if pair['name'] == 'leggings' || pair['name'] == 'sports-bra' || pair['name'] == 'tops' || pair['name'] == 'gloves' || pair['name'] == 'sports-jacket' %>
+            <tr>
+              <td>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
+              </td>
+              <td>
+                <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
+              </td>
+            </tr>
+          <% else %>
+            <tr style="display: none;">
+              <td>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
+              </td>
+              <td>
+                <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
 
-<%= form_for @order, url: customer_order_sizes_path(@order), method: :patch do |f| %>
-  <% f.submit %>
-<% end %>
+        <% @order.line_items[0].each do |key, value| %>
+          <% if key != 'properties' %>
+            <tr style="display:none;">
+              <td>
+                <input value="<%= key %>" type="hidden" name="line_items[<%= key %>]" class="form-control">
+              </td>
+              <td>
+                <input value="<%= value %>" type="hidden" name="line_items[<%= key %>]" class="form-control">
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+    <%= f.submit 'Update Sizes', :class => 'btn btn-info' %>
+  <% end %>
+</div>
