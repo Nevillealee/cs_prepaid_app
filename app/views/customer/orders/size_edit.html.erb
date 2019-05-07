@@ -1,0 +1,5 @@
+<h1>edit size form</h1>
+
+<%= form_for @order, url: customer_order_sizes_path(@order), method: :patch do |f| %>
+  <% f.submit %>
+<% end %>

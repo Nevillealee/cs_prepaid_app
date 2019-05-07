@@ -29,6 +29,15 @@ class Customer::OrdersController < ApplicationController
     end
   end
 
+  def size_edit
+    @order = Order.find(params[:id])
+  end
+
+  def size_update
+    @order = Order.find(params[:id])
+    render 'size_edit'
+  end
+
   private
 
   def line_item_params

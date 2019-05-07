@@ -1,4 +1,3 @@
-<h3> List order for specific customer here </h3>
 <table class="table order-show-wrapper">
   <thead>
     <tr>
@@ -41,6 +40,7 @@
             <% end %>
         <% end %>
         <%= link_to "Edit line items", edit_customer_order_path(@order) %>
+        <%= link_to "Edit sizes", edit_customer_order_sizes_path(@order) %>
       </td>
     </tr>
   </tbody>
