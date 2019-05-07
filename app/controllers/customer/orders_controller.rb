@@ -1,5 +1,5 @@
 class Customer::OrdersController < ApplicationController
-  # before_action :authenticate_user!
+  before_action :authenticate_user!
   skip_before_action :verify_authenticity_token
 
   def index
@@ -23,19 +23,27 @@ class Customer::OrdersController < ApplicationController
                     prop_params: properties_params,
                     order_id: params[:id],
                    }
-      ext_update(all_params)
+      recharge_line_item_update(all_params)
     else
       render 'edit'
     end
   end
-
+  # size edit form page
   def size_edit
     @order = Order.find(params[:id])
   end
 
+  # size edit form action
   def size_update
-    @order = Order.find(params[:id])
-    render 'size_edit'
+    if true # @order.update_attributes(order_params)
+      all_params = {line_items: line_item_params,
+                    prop_params: properties_params,
+                    order_id: params[:id],
+                   }
+      recharge_size_update(all_params)
+    else
+      render 'size_edit'
+    end
   end
 
   private
@@ -73,7 +81,11 @@ class Customer::OrdersController < ApplicationController
     )
   end
 
-  def ext_update(arg)
+  def recharge_line_item_update(arg)
     Resque.enqueue(OrderUpdate, arg)
+  end
+
+  def recharge_size_update(arg)
+    Resque.enqueue(OrderSizeUpdate, arg)
   end
 end
