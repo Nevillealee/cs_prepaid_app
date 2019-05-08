@@ -88,10 +88,10 @@ class Customer::OrdersController < ApplicationController
   end
 
   def recharge_line_item_update(arg)
-    Resque.enqueue(OrderUpdate, arg)
+    OrderUpdate.perform_later(arg)
   end
 
   def recharge_size_update(arg)
-    Resque.enqueue(OrderSizeUpdate, arg)
+    OrderSizeUpdate.perform_later(arg)
   end
 end

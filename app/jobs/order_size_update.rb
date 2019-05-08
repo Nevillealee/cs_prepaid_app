@@ -1,16 +1,17 @@
 require Rails.root.join('app', 'helpers', 'resque_helper.rb')
 
-class OrderSizeUpdate
+class OrderSizeUpdate < ApplicationJob
+  queue_as :order_size_update
   extend ResqueHelper
-  puts "MADE IT"
-  @queue = :order_size_change
+  self.queue_adapter = :resque
+  puts "ORDERSIZEUPDATE outside"
 
-  def self.perform(params)
-    ActiveRecord::Base.clear_active_connections!
-    puts "inside perform"
+  def perform(params)
+    puts "MY PARAMS IN ORDERSIZEUPDATE #{params.inspect}"
+    Resque.logger.info "inside perform"
 
     recharge_token = params[:recharge_token]
-    @recharge_change_header = {
+    recharge_change_header = {
       'X-Recharge-Access-Token' => recharge_token,
       'Accept' => 'application/json',
       'Content-Type' => 'application/json'
@@ -23,7 +24,7 @@ class OrderSizeUpdate
     #
     # # Update subscription through ReCharge api
     # sub_litems = {"properties" => sub.properties}.to_json
-    # res1 = HTTParty.put("https://api.rechargeapps.com/subscriptions/#{sub_id}", :headers => @recharge_change_header, :body => sub_litems, :timeout => 80)
+    # res1 = HTTParty.put("https://api.rechargeapps.com/subscriptions/#{sub_id}", :headers => recharge_change_header, :body => sub_litems, :timeout => 80)
     # Resque.logger.info(res1.inspect)
     #
     # queued_orders = Order.where("line_items @> ? AND status = ? AND is_prepaid = ?", [{subscription_id: sub_id}].to_json, "QUEUED", 1)

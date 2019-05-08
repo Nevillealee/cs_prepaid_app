@@ -310,7 +310,6 @@ DEPENDENCIES
   rails (~> 5.2.3)
   rails-controller-testing
   redis
-  redis-namespace
   resque
   resque_spec
   rspec-rails (~> 3.8)

@@ -1,1 +1,2 @@
+
 $redis = Redis.new

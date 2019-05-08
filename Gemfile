@@ -31,18 +31,17 @@ gem 'jquery-rails'
 # documentation generation tool for ruby
 gem 'yard'
 # Backround job support
-gem 'resque'
 gem 'redis'
-gem 'redis-namespace'
+gem 'resque'
 # bulk import supprt for activerecord
 gem 'activerecord-import'
 # http client
 gem 'httparty'
 # concurrent http request support
 gem 'typhoeus'
-gem 'resque_spec'
 
 group :development, :test do
+  gem 'resque_spec'
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
   gem 'rspec-rails', '~> 3.8'
