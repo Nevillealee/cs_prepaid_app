@@ -1,6 +1,6 @@
 class Customer::OrdersController < ApplicationController
-  before_action :authenticate_user!
-  skip_before_action :verify_authenticity_token
+  # before_action :authenticate_user!
+  # skip_before_action :verify_authenticity_token
 
   def index
     @orders = Order.where(customer_id: params[:customer_id],  status: "QUEUED")
@@ -22,9 +22,10 @@ class Customer::OrdersController < ApplicationController
       all_params = {line_items: line_item_params,
                     prop_params: properties_params,
                     order_id: params[:id],
+                    recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
                    }
       recharge_line_item_update(all_params)
-      redirect_back(fallback_location: root_path)
+      # redirect_back(fallback_location: root_path)
     else
       render 'edit'
     end
@@ -40,15 +41,16 @@ class Customer::OrdersController < ApplicationController
       all_params = {line_items: line_item_params,
                     prop_params: properties_params,
                     order_id: params[:id],
+                    recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
                    }
       recharge_size_update(all_params)
-      redirect_back(fallback_location: root_path)
+      # redirect_back(fallback_location: root_path)
     else
       render 'size_edit'
     end
   end
 
-  
+
 
   def line_item_params
     params.require(:line_items).permit(
@@ -80,17 +82,16 @@ class Customer::OrdersController < ApplicationController
       :shipping_interval_frequency,
       :shipping_interval_unit_type,
       :"sports-bra",
-      :tops
+      :tops,
+      :unique_identifier
     )
   end
 
   def recharge_line_item_update(arg)
-    puts "MADE IT"
     Resque.enqueue(OrderUpdate, arg)
   end
 
   def recharge_size_update(arg)
-    puts "MADE IT"
     Resque.enqueue(OrderSizeUpdate, arg)
   end
 end

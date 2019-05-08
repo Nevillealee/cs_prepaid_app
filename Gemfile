@@ -31,9 +31,9 @@ gem 'jquery-rails'
 # documentation generation tool for ruby
 gem 'yard'
 # Backround job support
+gem 'resque'
 gem 'redis'
-# gem 'redis-rails'
-gem 'resque', require: 'resque/server'
+gem 'redis-namespace'
 # bulk import supprt for activerecord
 gem 'activerecord-import'
 # http client

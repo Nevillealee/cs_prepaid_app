@@ -1,18 +1,9 @@
-# frozen_string_literal: true
-
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-
+  config.active_job.queue_adapter = :resque
   # Code is not reloaded between requests.
   config.cache_classes = true
 
-  # config.cache_store = :redis_store, {
-  #   host: 'localhost',
-  #   port: 6379,
-  #   db: 1,
-  #   namespace: 'cache',
-  #   expires_in: 90.minutes,
-  # }
   # Eager load code on boot. This eager loads most of Rails and
   # your application in memory, allowing both threaded web servers
   # and those relying on copy on write to perform better.
@@ -92,7 +83,7 @@ Rails.application.configure do
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
-  if ENV['RAILS_LOG_TO_STDOUT'].present?
+  if ENV["RAILS_LOG_TO_STDOUT"].present?
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
@@ -100,6 +91,4 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
-  #TODO(Neville): Set to actual host
-  config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
 end

@@ -22,5 +22,5 @@ Rails.application.routes.draw do
     patch 'orders/size_edit/:id', to: 'orders#size_update', as: :order_sizes
   end
 
-  mount Resque::Server.new, at: "/resque"
+  mount Resque::Server, at: '/resque'
 end

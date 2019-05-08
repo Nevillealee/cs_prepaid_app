@@ -2,20 +2,20 @@ require Rails.root.join('app', 'helpers', 'resque_helper.rb')
 
 class OrderSizeUpdate
   extend ResqueHelper
-  @queue = :order_size_changes
+  puts "MADE IT"
+  @queue = :order_size_change
 
   def self.perform(params)
-    Resque.logger = Logger.new("#{Rails.root}/log/order_size_update.log")
-    puts "MADE IT"
-    recharge_token = ENV['RECHARGE_STAGING_TOKEN']
+    ActiveRecord::Base.clear_active_connections!
+    puts "inside perform"
+
+    recharge_token = params[:recharge_token]
     @recharge_change_header = {
       'X-Recharge-Access-Token' => recharge_token,
       'Accept' => 'application/json',
       'Content-Type' => 'application/json'
     }
-    puts "MADE IT"
     new_line_items = format_params(params)
-    Resque.logger new_line_items.inspect
 
     # sub_id = new_line_items['subscription_id'].to_i,
     # sub = Subscription.find(sub_id)
@@ -45,11 +45,10 @@ class OrderSizeUpdate
 
     # params = {"subscription_id" => subscription_id, "action" => "change_sizes", "details" => new_sizes  }
 
-    if all_clear
-      # Resque.enqueue(SendEmailToCustomer, params)
-    else
-      # Resque.enqueue(SendEmailToCS, params)
-    end
-    Resque.logger.debug 'Sizes updated!'
+    # if all_clear
+    #   Resque.enqueue(SendEmailToCustomer, params)
+    # else
+    #   Resque.enqueue(SendEmailToCS, params)
+    # end
   end
 end
