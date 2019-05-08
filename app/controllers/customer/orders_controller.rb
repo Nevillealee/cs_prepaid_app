@@ -23,8 +23,8 @@ class Customer::OrdersController < ApplicationController
                     prop_params: properties_params,
                     order_id: params[:id],
                    }
-      # recharge_line_item_update(all_params)
-      Resque.enqueue(OrderUpdate, all_params)
+      recharge_line_item_update(all_params)
+      redirect_back(fallback_location: root_path)
     else
       render 'edit'
     end
@@ -48,7 +48,7 @@ class Customer::OrdersController < ApplicationController
     end
   end
 
-  private
+  
 
   def line_item_params
     params.require(:line_items).permit(
@@ -85,10 +85,12 @@ class Customer::OrdersController < ApplicationController
   end
 
   def recharge_line_item_update(arg)
+    puts "MADE IT"
     Resque.enqueue(OrderUpdate, arg)
   end
 
   def recharge_size_update(arg)
+    puts "MADE IT"
     Resque.enqueue(OrderSizeUpdate, arg)
   end
 end

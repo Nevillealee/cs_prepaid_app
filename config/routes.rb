@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'resque/server'
 
 Rails.application.routes.draw do
   devise_for :users, controllers: { registrations: 'users/registrations'  }
@@ -20,4 +21,6 @@ Rails.application.routes.draw do
     resources :orders, only: [:index, :show, :edit, :update]
     patch 'orders/size_edit/:id', to: 'orders#size_update', as: :order_sizes
   end
+
+  mount Resque::Server.new, at: "/resque"
 end

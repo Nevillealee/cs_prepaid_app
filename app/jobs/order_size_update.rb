@@ -2,16 +2,18 @@ require Rails.root.join('app', 'helpers', 'resque_helper.rb')
 
 class OrderSizeUpdate
   extend ResqueHelper
-  Resque.logger = Logger.new("#{Rails.root}/log/order_size_update.log")
   @queue = :order_size_changes
 
   def self.perform(params)
+    Resque.logger = Logger.new("#{Rails.root}/log/order_size_update.log")
+    puts "MADE IT"
     recharge_token = ENV['RECHARGE_STAGING_TOKEN']
     @recharge_change_header = {
       'X-Recharge-Access-Token' => recharge_token,
       'Accept' => 'application/json',
       'Content-Type' => 'application/json'
     }
+    puts "MADE IT"
     new_line_items = format_params(params)
     Resque.logger new_line_items.inspect
 

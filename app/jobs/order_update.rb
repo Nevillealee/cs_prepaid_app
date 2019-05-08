@@ -6,12 +6,14 @@ class OrderUpdate
   @queue = :orders
 
   def self.perform(params)
+    puts "MADE IT"
     recharge_token = ENV['RECHARGE_STAGING_TOKEN']
     @recharge_change_header = {
       'X-Recharge-Access-Token' => recharge_token,
       'Accept' => 'application/json',
       'Content-Type' => 'application/json'
     }
+    puts "MADE IT"
     my_order_id = params[:order_id]
     Resque.logger.info("[OrderUpdateJob] params recieved: #{params}")
     new_line_items = format_params(params)

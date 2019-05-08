@@ -180,24 +180,8 @@ GEM
     rb-inotify (0.10.0)
       ffi (~> 1.0)
     redis (4.1.0)
-    redis-actionpack (5.0.2)
-      actionpack (>= 4.0, < 6)
-      redis-rack (>= 1, < 3)
-      redis-store (>= 1.1.0, < 2)
-    redis-activesupport (5.0.7)
-      activesupport (>= 3, < 6)
-      redis-store (>= 1.3, < 2)
     redis-namespace (1.6.0)
       redis (>= 3.0.4)
-    redis-rack (2.0.5)
-      rack (>= 1.5, < 3)
-      redis-store (>= 1.2, < 2)
-    redis-rails (5.0.2)
-      redis-actionpack (>= 5.0, < 6)
-      redis-activesupport (>= 5.0, < 6)
-      redis-store (>= 1.2, < 2)
-    redis-store (1.6.0)
-      redis (>= 2.2, < 5)
     responders (2.4.1)
       actionpack (>= 4.2.0, < 6.0)
       railties (>= 4.2.0, < 6.0)
@@ -327,7 +311,7 @@ DEPENDENCIES
   puma (~> 3.11)
   rails (~> 5.2.3)
   rails-controller-testing
-  redis-rails
+  redis
   resque
   resque_spec
   rspec-rails (~> 3.8)

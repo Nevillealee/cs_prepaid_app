@@ -1,6 +1,7 @@
 # frozen_string_literal: true
+
 Resque.logger.level = Logger::DEBUG
-Resque.logger.formatter = Resque::QuietFormatter.new
+Resque.logger = Logger.new(Rails.root.join('log', "#{Rails.env}_resque.log"))
 
 rails_root = ENV['RAILS_ROOT'] || File.dirname(__FILE__) + '/../..'
 rails_env = ENV['RAILS_ENV'] || 'development'
