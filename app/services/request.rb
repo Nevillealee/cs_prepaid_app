@@ -1,7 +1,6 @@
-# caches Recharge batch data in Redis
 require Rails.root.join('app', 'helpers','requestable.rb')
-# require 'active_support'
 
+# caches Recharge batch data in Redis
 class Request
   include Requestable
   Resque.logger = Logger.new("#{Rails.root}/log/batch_request.log", 5, 10024000)
@@ -16,7 +15,6 @@ class Request
     my_class = @entity.camelize.constantize
     my_min_max = min_max
     params = query_params(@entity, my_min_max)
-    # my_class
     my_class.new.fetch(params)
   end
 

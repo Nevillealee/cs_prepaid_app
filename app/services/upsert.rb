@@ -1,6 +1,6 @@
-# synchronizes Redis with Active record
 require Rails.root.join('app', 'helpers','requestable.rb')
 
+# synchronizes Redis with Active record
 class Upsert
   include Requestable
   Resque.logger = Logger.new("#{Rails.root}/log/batch_upsert.log", 5, 10024000)

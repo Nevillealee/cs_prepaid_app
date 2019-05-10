@@ -17,7 +17,7 @@
           <% end %>
         </td>
         <td><%= order.scheduled_at.strftime('%B %d, %Y')  %></td>
-        <td>$<%= number_to_currency(order.total_price) %></td>
+        <td><%= number_to_currency(order.total_price) %></td>
         <td><%= order.status %></td>
       </tr>
     <% end %>

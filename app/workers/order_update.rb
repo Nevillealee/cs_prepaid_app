@@ -1,6 +1,6 @@
 
 class OrderUpdate
-  @queue = "order_update"
+  @queue = :order_update
   # extend ResqueHelper
   Resque.logger = Logger.new("#{Rails.root}/log/order_updates.log", 5, 10024000)
   Resque.logger.level = Logger::INFO

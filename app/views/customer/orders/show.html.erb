@@ -18,7 +18,6 @@
       <td><%= @order.status %></td>
       <td>
         <% @order.line_items.each do |line_item| %>
-
           <% if line_item.has_key?('images') %>
             <img src="<%= @order.line_items[0]['images']['small'] %>"/>
           <% end %>
