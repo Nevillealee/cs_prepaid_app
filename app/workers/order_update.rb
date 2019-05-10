@@ -1,15 +1,13 @@
-require Rails.root.join('app', 'helpers', 'resque_helper.rb')
 
-class OrderUpdate < ApplicationJob
-  queue_as :order_update
-  extend ResqueHelper
-  puts "ORDERUPDATE outside"
-  self.queue_adapter = :resque
+class OrderUpdate
+  @queue = "order_update"
+  # extend ResqueHelper
+  Resque.logger = Logger.new("#{Rails.root}/log/order_updates.log", 5, 10024000)
+  Resque.logger.level = Logger::INFO
 
-  def perform(params)
-    Resque.logger.info "MY PARAMS IN ORDERUPDATE #{params.inspect}"
-    puts "inside perform"
-    recharge_token = params[:recharge_token]
+  def self.perform(params)
+    Resque.logger.info "received params: #{params}"
+    recharge_token = params["recharge_token"]
     recharge_change_header = {
       'X-Recharge-Access-Token' => recharge_token,
       'Accept' => 'application/json',
@@ -37,5 +35,7 @@ class OrderUpdate < ApplicationJob
     # When updating line_items, you need to provide all the data that was in
     # line_items before, otherwise only new parameters will remain! (from Recharge docs)
     recharge_response = HTTParty.put("https://api.rechargeapps.com/orders/#{my_order_id}", :headers => recharge_change_header, :body => body, :timeout => 80)
+    Resque.logger.info "Recharge Response: #{recharge_response.inspect}"
+    Resque.logger.info "Recharge Response: #{recharge_response.code}"
   end
 end

@@ -1,5 +1,6 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
+
   # Code is not reloaded between requests.
   config.cache_classes = true
 
@@ -60,7 +61,7 @@ Rails.application.configure do
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
-  # config.active_job.queue_name_prefix = "cs_prepaid_app_#{Rails.env}"
+  # config.active_job.queue_name_prefix = "myapp_#{Rails.env}"
 
   config.action_mailer.perform_caching = false
 

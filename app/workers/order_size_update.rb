@@ -1,22 +1,19 @@
-require Rails.root.join('app', 'helpers', 'resque_helper.rb')
 
-class OrderSizeUpdate < ApplicationJob
-  queue_as :order_size_update
-  extend ResqueHelper
-  self.queue_adapter = :resque
-  puts "ORDERSIZEUPDATE outside"
-
-  def perform(params)
+class OrderSizeUpdate
+  @queue = "order_size_update"
+  # extend ResqueHelper
+  def self.perform(params)
     puts "MY PARAMS IN ORDERSIZEUPDATE #{params.inspect}"
-    Resque.logger.info "inside perform"
-
-    recharge_token = params[:recharge_token]
+    recharge_token = params["recharge_token"]
     recharge_change_header = {
       'X-Recharge-Access-Token' => recharge_token,
       'Accept' => 'application/json',
       'Content-Type' => 'application/json'
     }
-    new_line_items = format_params(params)
+
+    recharge_response = HTTParty.get("https://api.rechargeapps.com/orders/101805328", :headers => recharge_change_header,:timeout => 80)
+    Resque.logger.info recharge_response
+    # new_line_items = format_params(params)
 
     # sub_id = new_line_items['subscription_id'].to_i,
     # sub = Subscription.find(sub_id)

@@ -1,6 +1,6 @@
 class Customer::OrdersController < ApplicationController
-  # before_action :authenticate_user!
-  # skip_before_action :verify_authenticity_token
+  before_action :authenticate_user!
+  skip_before_action :verify_authenticity_token
 
   def index
     @orders = Order.where(customer_id: params[:customer_id],  status: "QUEUED")
@@ -25,7 +25,7 @@ class Customer::OrdersController < ApplicationController
                     recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
                    }
       recharge_line_item_update(all_params)
-      # redirect_back(fallback_location: root_path)
+      redirect_back(fallback_location: root_path)
     else
       render 'edit'
     end
@@ -44,7 +44,7 @@ class Customer::OrdersController < ApplicationController
                     recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
                    }
       recharge_size_update(all_params)
-      # redirect_back(fallback_location: root_path)
+      redirect_back(fallback_location: root_path)
     else
       render 'size_edit'
     end
@@ -88,10 +88,10 @@ class Customer::OrdersController < ApplicationController
   end
 
   def recharge_line_item_update(arg)
-    OrderUpdate.perform_later(arg)
+    Resque.enqueue(OrderUpdate, arg)
   end
 
   def recharge_size_update(arg)
-    OrderSizeUpdate.perform_later(arg)
+    Resque.enqueue(OrderSizeUpdate, arg)
   end
 end

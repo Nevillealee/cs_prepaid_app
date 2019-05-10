@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# 
 
 PRODUCT_COLLECTION ||= 'Prism Perfect - 3 Items'
 PREPAID_THREE ||= 1_635_509_436_467

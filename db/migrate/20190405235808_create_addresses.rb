@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# 
 
 class CreateAddresses < ActiveRecord::Migration[5.2]
   def change

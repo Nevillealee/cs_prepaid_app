@@ -1,8 +1,7 @@
-# frozen_string_literal: true
 module Requestable
-  Resque.logger = Logger.new(STDOUT)
+  Resque.logger = Logger.new("#{Rails.root}/log/requestable_typhoeus.log", 5, 10024000)
   HEADER = {
-    'X-Recharge-Access-Token' => ENV['RECHARGE_ACTIVE_TOKEN'],
+    'X-Recharge-Access-Token' => ENV['RECHARGE_STAGING_TOKEN'],
     'Accept' => 'application/json',
     'Content-Type' => 'application/json',
   }.freeze
@@ -11,17 +10,17 @@ module Requestable
 
   # returns 1D hash array of all entities from ReCharge
   def fetch(params)
-    Resque.logger.debug "Requestable.fetch received #{params.inspect}"
+    Resque.logger.info "Requestable.fetch received #{params.inspect}"
     past = Time.now
     total = api_count(params)
     remain_requests = (total/250.to_f).ceil
-    Resque.logger.debug "pages to request total: #{remain_requests}"
+    Resque.logger.info "pages to request total: #{remain_requests}"
     batch_num = (remain_requests / BATCH_SIZE.to_f).ceil
-    Resque.logger.debug "batch number: #{batch_num}"
+    Resque.logger.info "batch number: #{batch_num}"
     chap_start = 1
     chap_end = 0
     entity = params.fetch(:entity)
-    Resque.logger.debug "entity name: #{entity}"
+    Resque.logger.info "entity name: #{entity}"
     cache = $redis
     pages = []
     batch_num.times do
@@ -47,17 +46,17 @@ module Requestable
           if res.success?
             puts "#{entity.upcase} request queued"
           elsif res.timed_out?
-            Resque.logger.error "TIMED OUT: #{res.response_headers}"
+            Resque.logger.error "(HYDRA request) TIMED OUT: #{res.response_headers}"
           elsif res.code.zero?
-            Resque.logger.error "Couldnt get an http response #{res.return_message}"
+            Resque.logger.error "(HYDRA request) Couldnt get an http response #{res.return_message}"
           else
-            Resque.logger.error("HTTP request failed: #{res.code}")
+            Resque.logger.error("(HYDRA request) HTTP request failed: #{res.code}")
           end
         end
 
         request.on_success do |res|
           @used = res.headers['x-recharge-limit'].to_i
-          Resque.logger.debug res.headers['x-recharge-limit']
+          Resque.logger.info res.headers['x-recharge-limit']
           key = "#{entity}_pull:#{Time.now.strftime("%Y%m%d")}#{page.to_s.rjust(3, '0')}"
           hash_set(cache, key, res.response_body)
         end
@@ -68,7 +67,7 @@ module Requestable
       hydra.run
       batch_throttle(@used)
     end
-    Resque.logger.debug "Pages iterated: #{pages.inspect}"
+    Resque.logger.info "Pages iterated: #{pages.inspect}"
     Resque.logger.info("RUN TIME per #{total} records: #{(Time.now - past)}")
   end
 
@@ -84,16 +83,16 @@ module Requestable
                                 headers: HEADER)
     my_count = my_response['count'].to_i
     Resque.logger.info "#{my_count} #{object_name}'s on Recharge API"
-    Resque.logger.debug my_response
+    Resque.logger.info my_response
     my_count
   end
 
   def batch_throttle(requests_used)
     if requests_used > 20 && requests_used < 39
-      Resque.logger.debug "requests used: #{requests_used}, sleeping 10..."
+      Resque.logger.info "requests used: #{requests_used}, sleeping 10..."
       sleep 10
     elsif requests_used >= 39
-      Resque.logger.debug "requests used: #{requests_used}, sleeping 19..."
+      Resque.logger.info "requests used: #{requests_used}, sleeping 19..."
       sleep 19
     end
   end

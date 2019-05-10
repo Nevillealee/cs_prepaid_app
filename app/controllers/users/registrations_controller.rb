@@ -1,10 +1,9 @@
-# frozen_string_literal: true
-
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :authorize_admin, only: [:new, :create]
   before_action :configure_sign_up_params, only: [:create]
-  # prevents already signed in error when creating user as admin user
-  # skip_before_action :require_no_authentication
+  # prevents already signed in error when creating user is admin user
+  #TODO (Neville): fix bug with line below: allows admin to sign in after seed but cant add new user
+  skip_before_action :require_no_authentication
   # overwrites Devise helper method so that new user isnt automatically signed in
   def sign_up(resource_name, resource)
     true
