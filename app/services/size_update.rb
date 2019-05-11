@@ -29,7 +29,6 @@ class SizeUpdate
     sub = Subscription.find(sub_id)
 
     # Update Subscription in ReCharge api then locally if HTTP 200
-    puts "MY SUB ID = #{sub_id}"
     Resque.logger.warn("Property Update params sub_id(#{sub_id}) found in DB? #{sub_id == sub.id}")
     sub.sizes = new_sizes
     sub_litems = {"properties" => sub.properties}.to_json
@@ -60,7 +59,7 @@ class SizeUpdate
       :body => body,
       :timeout => 80
      )
-    Resque.logger.info "ORDER SIZE UPDATE RESPONSE: #{res2.parsed_response["order"]["line_items"]}"
+    Resque.logger.info "ORDER SIZE UPDATE RESPONSE: #{res2.parsed_response}"
     if (res2.code == 200)
       my_order.save!
       Resque.logger.info("New Order sizes: #{my_order.sizes(sub_id)}")

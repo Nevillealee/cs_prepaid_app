@@ -18,18 +18,15 @@ class Customer::OrdersController < ApplicationController
   # activates if order.exists?
   def update
     @order = Order.find(params[:id])
-    if true # @order.update_attributes(order_params)
-      all_params = {line_items: line_item_params,
-                    prop_params: properties_params,
-                    order_id: params[:id],
-                    recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
-                   }
-      recharge_line_item_update(all_params)
-      redirect_back(fallback_location: root_path)
-    else
-      render 'edit'
-    end
+    all_params = {line_items: line_item_params,
+                  prop_params: properties_params,
+                  order_id: params[:id],
+                  recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
+                 }
+    recharge_line_item_update(all_params)
+    redirect_to :action => "show", :id => params[:id]
   end
+
   # size edit form page
   def size_edit
     @order = Order.find(params[:id])
@@ -37,17 +34,14 @@ class Customer::OrdersController < ApplicationController
 
   # size edit form action
   def size_update
-    if true # @order.update_attributes(order_params)
-      all_params = {line_items: line_item_params,
-                    prop_params: properties_params,
-                    order_id: params[:id],
-                    recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
-                   }
-      recharge_size_update(all_params)
-      redirect_back(fallback_location: root_path)
-    else
-      render 'size_edit'
-    end
+    @order = Order.find(params[:id])
+    all_params = {line_items: line_item_params,
+                  prop_params: properties_params,
+                  order_id: params[:id],
+                  recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
+                 }
+    recharge_size_update(all_params)
+    redirect_to :action => "show", :id => params[:id]
   end
 
 
