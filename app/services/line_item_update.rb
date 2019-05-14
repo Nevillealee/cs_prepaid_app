@@ -51,8 +51,9 @@ class LineItemUpdate
     if recharge_response.code == 200
       my_order.save!
       Resque.logger.warn "LINE_ITEMS AFTER UPDATE: #{my_order.line_items}"
+      puts "Line_item update Done"
     else
-      Resque.logger.error "SOMETHING WENT WRONG#{recharge_response.errors}"
+      Resque.logger.error "SOMETHING WENT WRONG#{recharge_response}"
     end
   end
 

@@ -59,13 +59,13 @@ class SizeUpdate
       :body => body,
       :timeout => 80
      )
-    Resque.logger.info "ORDER SIZE UPDATE RESPONSE: #{res2.parsed_response}"
+    Resque.logger.info "ORDER SIZE UPDATE RESPONSE: #{res2}"
     if (res2.code == 200)
       my_order.save!
       Resque.logger.info("New Order sizes: #{my_order.sizes(sub_id)}")
+      puts "Order size update Done"
     else
       Resque.logger.error "ORDER ##{my_order.id} WAS NOT UPDATED IN DB OR RECHARGE!!!"
-      raise "#{res2.errors}"
     end
   end
 
