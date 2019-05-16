@@ -23,6 +23,7 @@ module Requestable
     Resque.logger.info "entity name: #{entity}"
     cache = $redis
     pages = []
+    @used = 0
     batch_num.times do
       entity_url = entity.pluralize
       if remain_requests > BATCH_SIZE
@@ -43,6 +44,7 @@ module Requestable
         )
         # error logging callbacks
         request.on_complete do |res|
+          @used = res.headers['x-recharge-limit'].to_i
           if res.success?
             puts "#{entity.upcase} request queued"
           elsif res.timed_out?
