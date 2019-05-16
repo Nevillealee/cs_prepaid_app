@@ -1,8 +1,8 @@
 class Subscription < ApplicationRecord
   include Requestable
 
-  belongs_to :customer
-  belongs_to :address
+  belongs_to :customer, optional: true
+  belongs_to :address, optional: true
   has_many :line_items
   has_many :orders, through: :order_line_items
 

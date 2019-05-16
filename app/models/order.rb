@@ -4,8 +4,8 @@ class Order < ApplicationRecord
   has_many :order_line_items
   # i.e. order contains multiple recurring subscriptions purchased at once
   has_many :subscriptions, through: :order_line_items
-  belongs_to :customer
-  belongs_to :address
+  belongs_to :customer, optional: true
+  belongs_to :address, optional: true
   SIZE_PROPERTIES = ['leggings', 'tops', 'sports-jacket', 'sports-bra', 'gloves'].freeze
 
   # Converts line item properties into hash 'product_type' => 'size' pairs

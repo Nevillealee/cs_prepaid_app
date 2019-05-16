@@ -26,8 +26,8 @@ class Upsert
     # my_hashes = temp.flatten
     Resque.logger.info "#{@entity} batches in redis before import: #{temp.size}"
     # active-import columns to save
-    ActiveRecord::Base.connection.disable_referential_integrity do
     temp.try(:each) do |my_hashes|
+      ActiveRecord::Base.connection.disable_referential_integrity do
         my_class.import(my_columns, my_hashes, batch_size: 10000, on_duplicate_key_update: :all)
       end
     end
