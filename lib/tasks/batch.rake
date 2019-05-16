@@ -11,12 +11,15 @@ task 'batch_request' => :environment do |t, args|
 end
 
 desc 'pull and upsert all data'
-task 'batch_sync' => :environment do
+task 'batch_mass_request' => :environment do
   Resque.enqueue(Harvest, 'customer')
   Resque.enqueue(Harvest, 'address')
   Resque.enqueue(Harvest, 'subscription')
   Resque.enqueue(Harvest, 'order')
+end
 
+desc 'upsert all data'
+task 'batch_mass_upsert' => :environment do  
   Resque.enqueue(Synchronize, 'customer')
   Resque.enqueue(Synchronize, 'address')
   Resque.enqueue(Synchronize, 'subscription')
