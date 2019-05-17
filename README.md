@@ -23,7 +23,7 @@ First, make sure you have these dependencies installed on your local machine
 
 Next, clone this repository onto your local machine
 ```
-  git clone https://github.com/Nevillealee/cs_prepaid_app.git
+git clone https://github.com/Nevillealee/cs_prepaid_app.git
 ```
 
 Change into newly created directory

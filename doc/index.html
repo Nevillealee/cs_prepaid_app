@@ -58,36 +58,106 @@
       </div>
 
       <div id="content"><div id='filecontents'>
-<h1 id="label-README">README</h1>
+<h1 id="label-Customer+Service+Portal">Customer Service Portal</h1>
 
-<p>This README would normally document whatever steps are necessary to get the application up and running.</p>
+<p>ReCharge Checkout API web interface for <a href="https://www.shopify.com/">Shopify</a></p>
 
-<p>Things you may want to cover:</p>
+<p><a href="https://codeclimate.com/github/Nevillealee/cs_prepaid_app/maintainability"><img src="https://api.codeclimate.com/v1/badges/3c0a827712ad8431c695/maintainability"></a></p>
+
+<p>Updates Prepaid Subscriptions through easy-to-use GUI. Features Administrative User functionality, asynchronous API -&gt; database syncing via batching, and a browser compatible background job monitoring.</p>
+
+<h2 id="label-Installation">Installation</h2>
+
+<h3 id="label-Prerequisites">Prerequisites</h3>
+
+<p>First, make sure you have these dependencies installed on your local machine</p>
 <ul><li>
-<p>Ruby version</p>
+<p>Ruby 2.6.0</p>
 </li><li>
-<p>System dependencies</p>
+<p>postgresql</p>
 </li><li>
-<p>Configuration</p>
+<p>nodejs</p>
 </li><li>
-<p>Database creation</p>
+<p>rvm (suggested)</p>
 </li><li>
-<p>Database initialization</p>
+<p>Redis</p>
 </li><li>
-<p>How to run the test suite</p>
-</li><li>
-<p>Services (job queues, cache servers, search engines, etc.)</p>
-</li><li>
-<p>Deployment instructions</p>
-</li><li>
-<p>...</p>
-
-<h1 id="label-cs_prepaid_app">cs_prepaid_app</h1>
+<p>Bundler</p>
 </li></ul>
+
+<h3 id="label-Set+up+repo">Set up repo</h3>
+
+<p>Next, clone this repository onto your local machine <code> git clone https://github.com/Nevillealee/cs_prepaid_app.git </code></p>
+
+<p>Change into newly created directory <code> cd cs_prepaid_app </code></p>
+
+<p>Install gems <code> bundle </code></p>
+
+<p>Create env file (in app root dir) with DATABASE_URL, DEFAULT_MASTER_USER_EMAIL, RECHARGE_TOKEN <code> touch .env </code></p>
+
+<h3 id="label-Set+up+database">Set up database</h3>
+
+<p>Create database <code> rake db:create </code></p>
+
+<p>Load schema file (dont run migrations) <code> rake db:schema:load </code></p>
+
+<h3 id="label-Set+up+initial+admin+User+-28Only+admins+can+create+new+users-29">Set up initial admin User (Only admins can create new users)</h3>
+
+<p>Edit db/seeds.rb <code> (linux) sudo nano db/seeds.rb or edit in your IDE </code></p>
+
+<p>Seed the database <code> rake db:seed </code></p>
+
+<h3 id="label-Populate+Data">Populate Data</h3>
+
+<p>Pull data from ReCharge <code> rake batch_mass_request </code></p>
+
+<p>Upsert data into Postgres <code> rake batch_mass_upsert </code></p>
+
+<h2 id="label-Start+the+app">Start the app</h2>
+
+<p>In a new terminal <code> rails s </code></p>
+
+<p>Then in a second terminal tab <code> QUEUE=* rake resque:work </code></p>
+
+<p>Last, leave a third terminal open for rake task commands</p>
+
+<h2 id="label-Usage+example">Usage example</h2>
+
+<p>A few motivating and useful examples of how your product can be used. Spice this up with code blocks and potentially more screenshots.</p>
+
+<p><em>For more examples and usage, please refer to the [<a href="wiki">Wiki]</a>.</em></p>
+
+<h2 id="label-Release+History">Release History</h2>
+<ul><li>
+<p>v1.0.0-beta</p>
+<ul><li>
+<p>Work in progress</p>
+</li></ul>
+</li></ul>
+
+<h2 id="label-Meta">Meta</h2>
+<ul><li>
+<p><strong>Neville Lee</strong> - <a href="https://github.com/nevillealee/cs_prepaid_app">github.com/nevillealee/cs_prepaid_app</a></p>
+</li><li>
+<p><strong>David Kim</strong> - <a href="https://github.com/dhkim1211">github.com/dhkim1211</a></p>
+</li></ul>
+
+<h2 id="label-Contributing">Contributing</h2>
+<ol><li>
+<p>Fork it (<a href="https://github.com/yourname/yourproject/fork">github.com/yourname/yourproject/fork</a>)</p>
+</li><li>
+<p>Create your feature branch (<code>git checkout -b feature/fooBar</code>)</p>
+</li><li>
+<p>Commit your changes (<code>git commit -am &#39;Add some fooBar&#39;</code>)</p>
+</li><li>
+<p>Push to the branch (<code>git push origin feature/fooBar</code>)</p>
+</li><li>
+<p>Create a new Pull Request</p>
+</li></ol>
 </div></div>
 
       <div id="footer">
-  Generated on Wed Apr 24 16:31:03 2019 by
+  Generated on Fri May 17 14:01:06 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.19 (ruby-2.6.0).
 </div>
