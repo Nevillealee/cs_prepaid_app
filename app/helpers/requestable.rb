@@ -1,7 +1,7 @@
 module Requestable
   Resque.logger = Logger.new("#{Rails.root}/log/requestable_typhoeus.log", 5, 10024000)
   HEADER = {
-    'X-Recharge-Access-Token' => ENV['RECHARGE_STAGING_TOKEN'],
+    'X-Recharge-Access-Token' => ENV['RECHARGE_TOKEN'],
     'Accept' => 'application/json',
     'Content-Type' => 'application/json',
   }.freeze

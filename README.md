@@ -1,26 +1,94 @@
 # Customer Service Portal
-> Short blurb about what your product does.
+ReCharge Checkout API web interface for [Shopify](https://www.shopify.com/)
 
-[![Build Status][travis-image]][travis-url]
-[![Downloads Stats][npm-downloads]][npm-url]
+[![Maintainability](https://api.codeclimate.com/v1/badges/3c0a827712ad8431c695/maintainability)](https://codeclimate.com/github/Nevillealee/cs_prepaid_app/maintainability)
 
-One to two paragraph statement about your product and what it does.
-
-![](header.png)
+Updates Prepaid Subscriptions through easy-to-use GUI. Features Administrative User functionality,
+asynchronous API -> database syncing via batching, and a browser compatible background job monitoring.
 
 ## Installation
 
-OS X & Linux:
+### Prerequisites
 
-```sh
-npm install my-crazy-module --save
+First, make sure you have these dependencies installed on your local machine
+
+* Ruby 2.6.0
+* postgresql
+* nodejs
+* rvm (suggested)
+* Redis
+* Bundler
+
+### Set up repo
+
+Next, clone this repository onto your local machine
+```
+  git clone https://github.com/Nevillealee/cs_prepaid_app.git
 ```
 
-Windows:
-
-```sh
-edit autoexec.bat
+Change into newly created directory
 ```
+cd cs_prepaid_app
+```
+
+Install gems
+```
+bundle
+```
+
+Create env file (in app root dir) with DATABASE_URL, DEFAULT_MASTER_USER_EMAIL, RECHARGE_TOKEN
+```
+touch .env
+```
+### Set up database
+
+Create database
+```
+rake db:create
+```
+
+Load schema file (dont run migrations)
+```
+rake db:schema:load
+```
+
+### Set up initial admin User (Only admins can create new users)
+
+Edit db/seeds.rb
+```
+(linux) sudo nano db/seeds.rb or edit in your IDE
+```
+
+Seed the database
+```
+rake db:seed
+```
+
+### Populate Data
+
+Pull data from ReCharge
+```
+rake batch_mass_request
+```
+
+Upsert data into Postgres
+```
+rake batch_mass_upsert
+```
+
+## Start the app
+
+In a new terminal
+```
+rails s
+```
+
+Then in a second terminal tab
+```
+QUEUE=* rake resque:work
+```
+
+Last, leave a third terminal open for rake task commands
 
 ## Usage example
 
@@ -28,37 +96,16 @@ A few motivating and useful examples of how your product can be used. Spice this
 
 _For more examples and usage, please refer to the [Wiki][wiki]._
 
-## Development setup
-
-Describe how to install all development dependencies and how to run an automated test-suite of some kind. Potentially do this for multiple platforms.
-
-```sh
-make install
-npm test
-```
 
 ## Release History
 
-* 0.2.1
-    * CHANGE: Update docs (module code remains unchanged)
-* 0.2.0
-    * CHANGE: Remove `setDefaultXYZ()`
-    * ADD: Add `init()`
-* 0.1.1
-    * FIX: Crash when calling `baz()` (Thanks @GenerousContributorName!)
-* 0.1.0
-    * The first proper release
-    * CHANGE: Rename `foo()` to `bar()`
-* 0.0.1
+* v1.0.0-beta
     * Work in progress
 
 ## Meta
 
-Your Name – [@YourTwitter](https://twitter.com/dbader_org) – YourEmail@example.com
-
-Distributed under the XYZ license. See ``LICENSE`` for more information.
-
-[https://github.com/yourname/github-link](https://github.com/dbader/)
+* **Neville Lee** - [https://github.com/nevillealee/cs_prepaid_app](https://github.com/nevillealee/cs_prepaid_app)
+* **David Kim** - [https://github.com/dhkim1211](https://github.com/dhkim1211)
 
 ## Contributing
 
@@ -67,11 +114,3 @@ Distributed under the XYZ license. See ``LICENSE`` for more information.
 3. Commit your changes (`git commit -am 'Add some fooBar'`)
 4. Push to the branch (`git push origin feature/fooBar`)
 5. Create a new Pull Request
-
-<!-- Markdown link & img dfn's -->
-[npm-image]: https://img.shields.io/npm/v/datadog-metrics.svg?style=flat-square
-[npm-url]: https://npmjs.org/package/datadog-metrics
-[npm-downloads]: https://img.shields.io/npm/dm/datadog-metrics.svg?style=flat-square
-[travis-image]: https://img.shields.io/travis/dbader/node-datadog-metrics/master.svg?style=flat-square
-[travis-url]: https://travis-ci.org/dbader/node-datadog-metrics
-[wiki]: https://github.com/yourname/yourproject/wiki

@@ -21,7 +21,7 @@ class Customer::OrdersController < ApplicationController
     all_params = {line_items: line_item_params,
                   prop_params: properties_params,
                   order_id: params[:id],
-                  recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
+                  recharge_token: ENV['RECHARGE_TOKEN'],
                  }
     recharge_line_item_update(all_params)
     redirect_to :action => "show", :id => params[:id]
@@ -38,7 +38,7 @@ class Customer::OrdersController < ApplicationController
     all_params = {line_items: line_item_params,
                   prop_params: properties_params,
                   order_id: params[:id],
-                  recharge_token: ENV['RECHARGE_STAGING_TOKEN'],
+                  recharge_token: ENV['RECHARGE_TOKEN'],
                  }
     recharge_size_update(all_params)
     redirect_to :action => "show", :id => params[:id]
