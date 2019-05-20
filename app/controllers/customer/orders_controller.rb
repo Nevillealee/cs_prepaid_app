@@ -24,7 +24,7 @@ class Customer::OrdersController < ApplicationController
                   recharge_token: ENV['RECHARGE_TOKEN'],
                  }
     recharge_line_item_update(all_params)
-    flash[:confirmation] = line_item_params
+    flash[:confirmation] = properties_params
     redirect_to :action => "show", :id => params[:id]
   end
 
@@ -42,7 +42,7 @@ class Customer::OrdersController < ApplicationController
                   recharge_token: ENV['RECHARGE_TOKEN'],
                  }
     recharge_size_update(all_params)
-    flash[:confirmation] = line_item_params
+    flash[:confirmation] = properties_params
     redirect_to :action => "show", :id => params[:id]
   end
 
