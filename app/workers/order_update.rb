@@ -1,5 +1,5 @@
 class OrderUpdate
-  @queue = :order_line_item_update
+  @queue = :recharge
   def self.perform(arg)
     puts "Order line_item update update enqueued"
     LineItemUpdate.new(arg).run
