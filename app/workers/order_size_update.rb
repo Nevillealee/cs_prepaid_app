@@ -1,5 +1,5 @@
 class OrderSizeUpdate
-  @queue = :order_size_update
+  @queue = :recharge
   def self.perform(arg)
     puts "Order size update enqueued"
     SizeUpdate.new(arg).run
