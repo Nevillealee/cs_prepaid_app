@@ -5,7 +5,7 @@ module Requestable
     'Accept' => 'application/json',
     'Content-Type' => 'application/json',
   }.freeze
-  BATCH_SIZE = 40
+  BATCH_SIZE = 38
   REDIS_EXPIRATION = 3600
 
   # returns 1D hash array of all entities from ReCharge
@@ -31,7 +31,7 @@ module Requestable
       else
         chap_end += remain_requests
       end
-      hydra = Typhoeus::Hydra.new(max_concurrency: 20)
+      hydra = Typhoeus::Hydra.new(max_concurrency: 38)
 
       chap_start.upto(chap_end) do |page|
         pages << page
@@ -89,11 +89,9 @@ module Requestable
   end
 
   def batch_throttle(requests_used)
-    if requests_used > (BATCH_SIZE - 2)
-      Resque.logger.info "requests used: #{requests_used}, sleeping #{requests_used/2}..."
-      puts "requests used: #{requests_used}, sleeping #{requests_used/2}..."
-      sleep requests_used/2
-    end
+    Resque.logger.info "requests used: #{requests_used}, sleeping #{requests_used/2}..."
+    puts "requests used: #{requests_used}, sleeping #{requests_used/2}..."
+    sleep requests_used/2
   end
 
   def hash_get_key_field(key)
