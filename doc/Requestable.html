@@ -74,6 +74,11 @@
   
 
   
+  <dl>
+    <dt>Included in:</dt>
+    <dd><span class='object_link'><a href="Address.html" title="Address (class)">Address</a></span>, <span class='object_link'><a href="Customer.html" title="Customer (class)">Customer</a></span>, <span class='object_link'><a href="Order.html" title="Order (class)">Order</a></span>, <span class='object_link'><a href="OrderLineItem.html" title="OrderLineItem (class)">OrderLineItem</a></span>, <span class='object_link'><a href="Request.html" title="Request (class)">Request</a></span>, <span class='object_link'><a href="Subscription.html" title="Subscription (class)">Subscription</a></span>, <span class='object_link'><a href="Upsert.html" title="Upsert (class)">Upsert</a></span></dd>
+  </dl>
+  
 
   
   <dl>
@@ -96,7 +101,7 @@
           
         </dt>
         <dd><pre class="code"><span class='lbrace'>{</span>
-  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>X-Recharge-Access-Token</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>RECHARGE_ACTIVE_TOKEN</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
+  <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>X-Recharge-Access-Token</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='const'>ENV</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>RECHARGE_TOKEN</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='comma'>,</span>
   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Accept</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>application/json</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
   <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>Content-Type</span><span class='tstring_end'>&#39;</span></span> <span class='op'>=&gt;</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>application/json</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span>
 <span class='rbrace'>}</span><span class='period'>.</span><span class='id identifier rubyid_freeze'>freeze</span></pre></dd>
@@ -347,6 +352,7 @@
       <pre class="lines">
 
 
+81
 82
 83
 84
@@ -355,11 +361,10 @@
 87
 88
 89
-90
-91</pre>
+90</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 82</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 81</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_api_count'>api_count</span><span class='lparen'>(</span><span class='id identifier rubyid_args'>args</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_query_str'>query_str</span> <span class='op'>=</span> <span class='id identifier rubyid_args'>args</span><span class='lbracket'>[</span><span class='symbol'>:query</span><span class='rbracket'>]</span>
@@ -368,7 +373,7 @@
                               <span class='label'>headers:</span> <span class='const'><span class='object_link'><a href="#HEADER-constant" title="Requestable::HEADER (constant)">HEADER</a></span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_my_count'>my_count</span> <span class='op'>=</span> <span class='id identifier rubyid_my_response'>my_response</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>count</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
   <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_my_count'>my_count</span><span class='embexpr_end'>}</span><span class='tstring_content'> </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_object_name'>object_name</span><span class='embexpr_end'>}</span><span class='tstring_content'>&#39;s on Recharge API</span><span class='tstring_end'>&quot;</span></span>
-  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='id identifier rubyid_my_response'>my_response</span>
+  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='id identifier rubyid_my_response'>my_response</span>
   <span class='id identifier rubyid_my_count'>my_count</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -391,6 +396,7 @@
       <pre class="lines">
 
 
+92
 93
 94
 95
@@ -398,18 +404,17 @@
 97
 98
 99
-100
-101</pre>
+100</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 93</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 92</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_batch_throttle'>batch_throttle</span><span class='lparen'>(</span><span class='id identifier rubyid_requests_used'>requests_used</span><span class='rparen'>)</span>
   <span class='kw'>if</span> <span class='id identifier rubyid_requests_used'>requests_used</span> <span class='op'>&gt;</span> <span class='int'>20</span> <span class='op'>&amp;&amp;</span> <span class='id identifier rubyid_requests_used'>requests_used</span> <span class='op'>&lt;</span> <span class='int'>39</span>
-    <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>requests used: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_requests_used'>requests_used</span><span class='embexpr_end'>}</span><span class='tstring_content'>, sleeping 10...</span><span class='tstring_end'>&quot;</span></span>
+    <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>requests used: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_requests_used'>requests_used</span><span class='embexpr_end'>}</span><span class='tstring_content'>, sleeping 10...</span><span class='tstring_end'>&quot;</span></span>
     <span class='id identifier rubyid_sleep'>sleep</span> <span class='int'>10</span>
-  <span class='kw'>else</span>
-    <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>requests used: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_requests_used'>requests_used</span><span class='embexpr_end'>}</span><span class='tstring_content'>, sleeping 19...</span><span class='tstring_end'>&quot;</span></span>
+  <span class='kw'>elsif</span> <span class='id identifier rubyid_requests_used'>requests_used</span> <span class='op'>&gt;=</span> <span class='int'>39</span>
+    <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>requests used: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_requests_used'>requests_used</span><span class='embexpr_end'>}</span><span class='tstring_content'>, sleeping 19...</span><span class='tstring_end'>&quot;</span></span>
     <span class='id identifier rubyid_sleep'>sleep</span> <span class='int'>19</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
@@ -444,6 +449,7 @@
       <pre class="lines">
 
 
+12
 13
 14
 15
@@ -505,26 +511,26 @@
 71
 72
 73
-74
-75</pre>
+74</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 13</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 12</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
-  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Requestable.fetch received </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Requestable.fetch received </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_past'>past</span> <span class='op'>=</span> <span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span>
   <span class='id identifier rubyid_total'>total</span> <span class='op'>=</span> <span class='id identifier rubyid_api_count'>api_count</span><span class='lparen'>(</span><span class='id identifier rubyid_params'>params</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_remain_requests'>remain_requests</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_total'>total</span><span class='op'>/</span><span class='int'>250</span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_ceil'>ceil</span>
-  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pages to request total: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_remain_requests'>remain_requests</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>pages to request total: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_remain_requests'>remain_requests</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_batch_num'>batch_num</span> <span class='op'>=</span> <span class='lparen'>(</span><span class='id identifier rubyid_remain_requests'>remain_requests</span> <span class='op'>/</span> <span class='const'><span class='object_link'><a href="#BATCH_SIZE-constant" title="Requestable::BATCH_SIZE (constant)">BATCH_SIZE</a></span></span><span class='period'>.</span><span class='id identifier rubyid_to_f'>to_f</span><span class='rparen'>)</span><span class='period'>.</span><span class='id identifier rubyid_ceil'>ceil</span>
-  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>batch number: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_batch_num'>batch_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>batch number: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_batch_num'>batch_num</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_chap_start'>chap_start</span> <span class='op'>=</span> <span class='int'>1</span>
   <span class='id identifier rubyid_chap_end'>chap_end</span> <span class='op'>=</span> <span class='int'>0</span>
   <span class='id identifier rubyid_entity'>entity</span> <span class='op'>=</span> <span class='id identifier rubyid_params'>params</span><span class='period'>.</span><span class='id identifier rubyid_fetch'>fetch</span><span class='lparen'>(</span><span class='symbol'>:entity</span><span class='rparen'>)</span>
-  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>entity name: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entity'>entity</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>entity name: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entity'>entity</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='id identifier rubyid_cache'>cache</span> <span class='op'>=</span> <span class='gvar'>$redis</span>
   <span class='id identifier rubyid_pages'>pages</span> <span class='op'>=</span> <span class='lbracket'>[</span><span class='rbracket'>]</span>
+  <span class='ivar'>@used</span> <span class='op'>=</span> <span class='int'>0</span>
   <span class='id identifier rubyid_batch_num'>batch_num</span><span class='period'>.</span><span class='id identifier rubyid_times'>times</span> <span class='kw'>do</span>
     <span class='id identifier rubyid_entity_url'>entity_url</span> <span class='op'>=</span> <span class='id identifier rubyid_entity'>entity</span><span class='period'>.</span><span class='id identifier rubyid_pluralize'>pluralize</span>
     <span class='kw'>if</span> <span class='id identifier rubyid_remain_requests'>remain_requests</span> <span class='op'>&gt;</span> <span class='const'><span class='object_link'><a href="#BATCH_SIZE-constant" title="Requestable::BATCH_SIZE (constant)">BATCH_SIZE</a></span></span>
@@ -534,6 +540,7 @@
       <span class='id identifier rubyid_chap_end'>chap_end</span> <span class='op'>+=</span> <span class='id identifier rubyid_remain_requests'>remain_requests</span>
     <span class='kw'>end</span>
     <span class='id identifier rubyid_hydra'>hydra</span> <span class='op'>=</span> <span class='const'>Typhoeus</span><span class='op'>::</span><span class='const'>Hydra</span><span class='period'>.</span><span class='id identifier rubyid_new'>new</span><span class='lparen'>(</span><span class='label'>max_concurrency:</span> <span class='int'>20</span><span class='rparen'>)</span>
+
     <span class='id identifier rubyid_chap_start'>chap_start</span><span class='period'>.</span><span class='id identifier rubyid_upto'>upto</span><span class='lparen'>(</span><span class='id identifier rubyid_chap_end'>chap_end</span><span class='rparen'>)</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_page'>page</span><span class='op'>|</span>
       <span class='id identifier rubyid_pages'>pages</span> <span class='op'>&lt;&lt;</span> <span class='id identifier rubyid_page'>page</span>
       <span class='comment'># queue up current batch
@@ -544,25 +551,23 @@
       <span class='rparen'>)</span>
       <span class='comment'># error logging callbacks
 </span>      <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_on_complete'>on_complete</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_res'>res</span><span class='op'>|</span>
+        <span class='ivar'>@used</span> <span class='op'>=</span> <span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_headers'>headers</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>x-recharge-limit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
         <span class='kw'>if</span> <span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_success?'>success?</span>
           <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entity'>entity</span><span class='period'>.</span><span class='id identifier rubyid_upcase'>upcase</span><span class='embexpr_end'>}</span><span class='tstring_content'> request queued</span><span class='tstring_end'>&quot;</span></span>
         <span class='kw'>elsif</span> <span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_timed_out?'>timed_out?</span>
-          <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>TIMED OUT: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_response_headers'>response_headers</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+          <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(HYDRA request) TIMED OUT: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_response_headers'>response_headers</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
         <span class='kw'>elsif</span> <span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span><span class='period'>.</span><span class='id identifier rubyid_zero?'>zero?</span>
-          <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Couldnt get an http response </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_return_message'>return_message</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+          <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(HYDRA request) Couldnt get an http response </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_return_message'>return_message</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
         <span class='kw'>else</span>
-          <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>HTTP request failed: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+          <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_error'>error</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>(HYDRA request) HTTP request failed: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_code'>code</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
         <span class='kw'>end</span>
       <span class='kw'>end</span>
 
       <span class='id identifier rubyid_request'>request</span><span class='period'>.</span><span class='id identifier rubyid_on_success'>on_success</span> <span class='kw'>do</span> <span class='op'>|</span><span class='id identifier rubyid_res'>res</span><span class='op'>|</span>
         <span class='ivar'>@used</span> <span class='op'>=</span> <span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_headers'>headers</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>x-recharge-limit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_to_i'>to_i</span>
-        <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_headers'>headers</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>x-recharge-limit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
-        <span class='comment'># REDIS HGET -&gt; e.g. order_pull:20190422:001&quot;
-</span>        <span class='comment'># key=order_pull:20190422, field= 3 digit page num: &quot;001-250&quot;
-</span>        <span class='id identifier rubyid_key'>key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entity'>entity</span><span class='embexpr_end'>}</span><span class='tstring_content'>_pull:</span><span class='embexpr_beg'>#{</span><span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='period'>.</span><span class='id identifier rubyid_strftime'>strftime</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%Y%m%d</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_page'>page</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_rjust'>rjust</span><span class='lparen'>(</span><span class='int'>3</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
-        <span class='comment'># cache array of entitys as json in REDIS
-</span>        <span class='id identifier rubyid_hash_set'>hash_set</span><span class='lparen'>(</span><span class='id identifier rubyid_cache'>cache</span><span class='comma'>,</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_response_body'>response_body</span><span class='rparen'>)</span>
+        <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_headers'>headers</span><span class='lbracket'>[</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>x-recharge-limit</span><span class='tstring_end'>&#39;</span></span><span class='rbracket'>]</span>
+        <span class='id identifier rubyid_key'>key</span> <span class='op'>=</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_entity'>entity</span><span class='embexpr_end'>}</span><span class='tstring_content'>_pull:</span><span class='embexpr_beg'>#{</span><span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span><span class='period'>.</span><span class='id identifier rubyid_strftime'>strftime</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>%Y%m%d</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_page'>page</span><span class='period'>.</span><span class='id identifier rubyid_to_s'>to_s</span><span class='period'>.</span><span class='id identifier rubyid_rjust'>rjust</span><span class='lparen'>(</span><span class='int'>3</span><span class='comma'>,</span> <span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>0</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+        <span class='id identifier rubyid_hash_set'>hash_set</span><span class='lparen'>(</span><span class='id identifier rubyid_cache'>cache</span><span class='comma'>,</span> <span class='id identifier rubyid_key'>key</span><span class='comma'>,</span> <span class='id identifier rubyid_res'>res</span><span class='period'>.</span><span class='id identifier rubyid_response_body'>response_body</span><span class='rparen'>)</span>
       <span class='kw'>end</span>
 
       <span class='id identifier rubyid_hydra'>hydra</span><span class='period'>.</span><span class='id identifier rubyid_queue'>queue</span><span class='lparen'>(</span><span class='id identifier rubyid_request'>request</span><span class='rparen'>)</span>
@@ -571,7 +576,7 @@
     <span class='id identifier rubyid_hydra'>hydra</span><span class='period'>.</span><span class='id identifier rubyid_run'>run</span>
     <span class='id identifier rubyid_batch_throttle'>batch_throttle</span><span class='lparen'>(</span><span class='ivar'>@used</span><span class='rparen'>)</span>
   <span class='kw'>end</span>
-  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_debug'>debug</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Pages iterated: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_pages'>pages</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
+  <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>Pages iterated: </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_pages'>pages</span><span class='period'>.</span><span class='id identifier rubyid_inspect'>inspect</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='const'>Resque</span><span class='period'>.</span><span class='id identifier rubyid_logger'>logger</span><span class='period'>.</span><span class='id identifier rubyid_info'>info</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>RUN TIME per </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_total'>total</span><span class='embexpr_end'>}</span><span class='tstring_content'> records: </span><span class='embexpr_beg'>#{</span><span class='lparen'>(</span><span class='const'>Time</span><span class='period'>.</span><span class='id identifier rubyid_now'>now</span> <span class='op'>-</span> <span class='id identifier rubyid_past'>past</span><span class='rparen'>)</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -594,14 +599,14 @@
       <pre class="lines">
 
 
+120
 121
 122
 123
-124
-125</pre>
+124</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 121</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 120</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hash_get'>hash_get</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_kf'>kf</span> <span class='op'>=</span> <span class='id identifier rubyid_hash_get_key_field'>hash_get_key_field</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
@@ -628,13 +633,13 @@
       <pre class="lines">
 
 
+126
 127
 128
-129
-130</pre>
+129</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 127</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 126</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hash_get_all'>hash_get_all</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_r'>r</span> <span class='op'>=</span> <span class='gvar'>$redis</span>
@@ -660,6 +665,7 @@
       <pre class="lines">
 
 
+102
 103
 104
 105
@@ -667,19 +673,18 @@
 107
 108
 109
-110
-111</pre>
+110</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 103</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 102</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hash_get_key_field'>hash_get_key_field</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
-  <span class='id identifier rubyid_s'>s</span> <span class='op'>=</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:</span><span class='tstring_end'>&quot;</span></span><span class='rparen'>)</span>
+  <span class='id identifier rubyid_s'>s</span> <span class='op'>=</span> <span class='id identifier rubyid_key'>key</span><span class='period'>.</span><span class='id identifier rubyid_split'>split</span><span class='lparen'>(</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:</span><span class='tstring_end'>&#39;</span></span><span class='rparen'>)</span>
   <span class='id identifier rubyid_puts'>puts</span> <span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>s = </span><span class='embexpr_beg'>#{</span><span class='id identifier rubyid_s'>s</span><span class='embexpr_end'>}</span><span class='tstring_end'>&quot;</span></span>
   <span class='kw'>if</span> <span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='period'>.</span><span class='id identifier rubyid_length'>length</span> <span class='op'>&gt;</span> <span class='int'>3</span>
-      <span class='lbrace'>{</span><span class='symbol'>:key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:</span><span class='tstring_end'>&quot;</span></span><span class='op'>+</span><span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>..</span><span class='op'>-</span><span class='int'>4</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:field</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='op'>-</span><span class='int'>3</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span>
+      <span class='lbrace'>{</span><span class='symbol'>:key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:</span><span class='tstring_end'>&#39;</span></span><span class='op'>+</span><span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='int'>0</span><span class='op'>..</span><span class='op'>-</span><span class='int'>4</span><span class='rbracket'>]</span><span class='comma'>,</span> <span class='symbol'>:field</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='lbracket'>[</span><span class='op'>-</span><span class='int'>3</span><span class='op'>..</span><span class='op'>-</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span>
   <span class='kw'>else</span>
-      <span class='lbrace'>{</span><span class='symbol'>:key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&quot;</span><span class='tstring_content'>:</span><span class='tstring_end'>&quot;</span></span><span class='comma'>,</span> <span class='symbol'>:field</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span>
+      <span class='lbrace'>{</span><span class='symbol'>:key</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>0</span><span class='rbracket'>]</span><span class='op'>+</span><span class='tstring'><span class='tstring_beg'>&#39;</span><span class='tstring_content'>:</span><span class='tstring_end'>&#39;</span></span><span class='comma'>,</span> <span class='symbol'>:field</span> <span class='op'>=&gt;</span> <span class='id identifier rubyid_s'>s</span><span class='lbracket'>[</span><span class='int'>1</span><span class='rbracket'>]</span><span class='rbrace'>}</span>
   <span class='kw'>end</span>
 <span class='kw'>end</span></pre>
     </td>
@@ -702,16 +707,16 @@
       <pre class="lines">
 
 
+112
 113
 114
 115
 116
 117
-118
-119</pre>
+118</pre>
     </td>
     <td>
-      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 113</span>
+      <pre class="code"><span class="info file"># File 'app/helpers/requestable.rb', line 112</span>
 
 <span class='kw'>def</span> <span class='id identifier rubyid_hash_set'>hash_set</span><span class='lparen'>(</span><span class='id identifier rubyid_r'>r</span><span class='comma'>,</span><span class='id identifier rubyid_key'>key</span><span class='comma'>,</span><span class='id identifier rubyid_value'>value</span><span class='rparen'>)</span>
   <span class='id identifier rubyid_kf'>kf</span> <span class='op'>=</span> <span class='id identifier rubyid_hash_get_key_field'>hash_get_key_field</span><span class='lparen'>(</span><span class='id identifier rubyid_key'>key</span><span class='rparen'>)</span>
@@ -730,7 +735,7 @@
 </div>
 
       <div id="footer">
-  Generated on Wed Apr 24 16:30:05 2019 by
+  Generated on Fri May 17 14:01:07 2019 by
   <a href="http://yardoc.org" title="Yay! A Ruby Documentation Tool" target="_parent">yard</a>
   0.9.19 (ruby-2.6.0).
 </div>

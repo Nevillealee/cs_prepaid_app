@@ -23,7 +23,6 @@ module Requestable
     Resque.logger.info "entity name: #{entity}"
     cache = $redis
     pages = []
-    @used = 0
     batch_num.times do
       entity_url = entity.pluralize
       if remain_requests > BATCH_SIZE
@@ -57,8 +56,8 @@ module Requestable
         end
 
         request.on_success do |res|
-          @used = res.headers['x-recharge-limit'].to_i
-          Resque.logger.info res.headers['x-recharge-limit']
+          # @used = res.headers['x-recharge-limit'].to_i
+          # Resque.logger.info res.headers['x-recharge-limit']
           key = "#{entity}_pull:#{Time.now.strftime("%Y%m%d")}#{page.to_s.rjust(3, '0')}"
           hash_set(cache, key, res.response_body)
         end
@@ -90,12 +89,10 @@ module Requestable
   end
 
   def batch_throttle(requests_used)
-    if requests_used > 20 && requests_used < 39
-      Resque.logger.info "requests used: #{requests_used}, sleeping 10..."
-      sleep 10
-    elsif requests_used >= 39
-      Resque.logger.info "requests used: #{requests_used}, sleeping 19..."
-      sleep 19
+    if requests_used > (BATCH_SIZE - 2)
+      Resque.logger.info "requests used: #{requests_used}, sleeping #{requests_used/2}..."
+      puts "requests used: #{requests_used}, sleeping #{requests_used/2}..."
+      sleep requests_used/2
     end
   end
 
