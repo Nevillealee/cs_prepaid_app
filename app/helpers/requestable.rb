@@ -5,7 +5,7 @@ module Requestable
     'Accept' => 'application/json',
     'Content-Type' => 'application/json',
   }.freeze
-  BATCH_SIZE = 38
+  BATCH_SIZE = 35
   REDIS_EXPIRATION = 3600
 
   # returns 1D hash array of all entities from ReCharge
@@ -31,7 +31,7 @@ module Requestable
       else
         chap_end += remain_requests
       end
-      hydra = Typhoeus::Hydra.new(max_concurrency: 38)
+      hydra = Typhoeus::Hydra.new(max_concurrency: 35)
 
       chap_start.upto(chap_end) do |page|
         pages << page
