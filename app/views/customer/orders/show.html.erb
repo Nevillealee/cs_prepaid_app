@@ -1,7 +1,19 @@
 <%# flash[:confirmation] object generated after form data recieved. lasts during current session only %>
 
 <% if flash[:confirmation] %>
-  <p><%= flash[:confirmation] %></p>
+  <div class="update-confirmation-wrapper">
+    <p>The order has been updated!</p>
+    <div class="update-confirmation-inner-wrapper">
+
+      <ul>
+        <li>Product Collection: <span><%= flash[:confirmation]['product_collection'] %></span></li>
+        <li>Tops: <span><%= flash[:confirmation]['tops'] %></span></li>
+        <li>Leggings: <span><%= flash[:confirmation]['leggings'] %></span></li>
+        <li>Sports Bra: <span><%= flash[:confirmation]['sports-bra'] %></span></li>
+        <li>Gloves: <span><%= flash[:confirmation]['gloves'] %></span></li>
+      </ul>
+    </div>
+  </div>
 <% end %>
 
 <table class="table order-show-wrapper">
