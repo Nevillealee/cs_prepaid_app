@@ -64,6 +64,7 @@ class SizeUpdate
       my_order.save!
       Resque.logger.info("New Order sizes: #{my_order.sizes(sub_id)}")
       puts "Order size update Done"
+      stream_complete_update
     else
       Resque.logger.error "ORDER ##{my_order.id} WAS NOT UPDATED IN DB OR RECHARGE!!!"
     end
@@ -77,5 +78,21 @@ class SizeUpdate
   def get_param_sizes(arg)
     parameters = arg["prop_params"]
     parameters.select{|p| SIZE_PROPERTIES.include? p}
+  end
+
+  def stream_pre_update
+    ActionCable.server.broadcast "notifications:TEST", {html:
+      "<div class='alert alert-warning alert-block text-center'>
+          Sending update sizes request to Recharge API....
+      </div>"
+      }
+  end
+
+  def stream_complete_update
+      ActionCable.server.broadcast "notifications:TEST", {html:
+    "<div class='alert alert-success alert-block text-center'>
+        Update complete!
+     </div>"
+      }
   end
 end

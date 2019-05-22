@@ -25,6 +25,7 @@ class Customer::OrdersController < ApplicationController
                  }
     recharge_line_item_update(all_params)
     flash[:confirmation] = properties_params
+    flash[:action] = "line_item"
     redirect_to :action => "show", :id => params[:id]
   end
 
@@ -43,6 +44,7 @@ class Customer::OrdersController < ApplicationController
                  }
     recharge_size_update(all_params)
     flash[:confirmation] = properties_params
+    flash[:action] = "size_update"
     redirect_to :action => "show", :id => params[:id]
   end
 

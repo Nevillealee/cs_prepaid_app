@@ -23,5 +23,6 @@ Rails.application.routes.draw do
 
   authenticate :user do
     mount Resque::Server, at: '/jobs'
+    mount ActionCable.server => '/cable'
   end
 end
