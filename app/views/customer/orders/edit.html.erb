@@ -6,7 +6,19 @@
     <table class="table">
       <tbody>
         <% @order.line_items[0]['properties'].each do |pair| %>
-          <% if pair['name'] == 'leggings' || pair['name'] == 'sports-bra' || pair['name'] == 'tops' || pair['name'] == 'gloves' || pair['name'] == 'sports-jacket' %>
+          <% if pair['name'] == 'product_collection' %>
+            <tr>
+              <td>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", disabled: true %>
+              </td>
+              <td>
+                <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+        <% @order.line_items[0]['properties'].each do |pair| %>
+          <% if pair['name'] == 'leggings' || pair['name'] == 'sports-bra' || pair['name'] == 'tops' || pair['name'] == 'gloves' || pair['name'] == 'sports-jacket' || pair['name'] == 'product_collection' %>
             <tr style="display: none;">
               <td>
                 <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
@@ -18,10 +30,10 @@
           <% else %>
             <tr>
               <td>
-                <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", disabled: true %>
               </td>
               <td>
-                <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
+                <%= f.text_field pair['name'], value: pair['value'], class: "form-control", disabled: true  %>
               </td>
             </tr>
           <% end %>
