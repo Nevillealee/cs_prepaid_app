@@ -16,6 +16,7 @@ class LineItemUpdate
   end
 
   def run
+    stream_pre_update
     Resque.logger = Logger.new("#{Rails.root}/log/order_updates.log", 5, 10024000)
     Resque.logger.level = Logger::INFO
     Resque.logger.info "received params: #{@form_data}"
@@ -52,9 +53,41 @@ class LineItemUpdate
       my_order.save!
       Resque.logger.warn "LINE_ITEMS AFTER UPDATE: #{my_order.line_items}"
       puts "Line_item update Done"
+      stream_complete_update(recharge_response)
     else
       Resque.logger.error "SOMETHING WENT WRONG#{recharge_response}"
+      stream_failure(recharge_response)
     end
+  end
+
+  def stream_pre_update
+    ActionCable.server.broadcast "notifications:product_switch", {html:
+      "<div class='alert alert-primary alert-block text-center'>
+          Sending Subscription switch request to Recharge API....
+      </div>"
+      }
+  end
+
+  def stream_complete_update(res)
+    results = res['order']['line_items'][0]['properties'].select do |hash|
+      hash['name'] == 'product_collection'
+    end
+
+    ActionCable.server.broadcast "notifications:product_switch", {html:
+    "<div class='alert alert-success alert-block text-center'>
+      Subscription switched to #{results} in Recharge successfully!
+      *<a href='/customer/orders/#{@form_data['order_id']}'>Order</a> page may require refresh to show updated values
+     </div>"
+    }
+  end
+
+  def stream_failure(res)
+    ActionCable.server.broadcast "notifications:product_switch", {html:
+    "<div class='alert alert-danger alert-block text-center'>
+        Recharge API Error: #{res["errors"]}
+        <p>Please correct error & resubmit switch request <a href='/customer/orders/#{@form_data['order_id']}'>here</a></p>
+     </div>"
+    }
   end
 
 end

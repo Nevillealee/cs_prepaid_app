@@ -8,7 +8,7 @@
           <% if pair['name'] == 'leggings' || pair['name'] == 'sports-bra' || pair['name'] == 'tops' || pair['name'] == 'gloves' || pair['name'] == 'sports-jacket' %>
             <tr>
               <td>
-                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", disabled: true %>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", readonly: true %>
               </td>
               <td>
                 <%= select_tag(pair['name'], options_for_select([['XS', 'XS'], ['S', 'S'], ['M', 'M'], ['L', 'L'], ['XL', 'XL']], pair['value']), name: "properties[" + pair['name'] + "]"  ,class: 'form-control') %>

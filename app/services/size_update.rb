@@ -83,7 +83,7 @@ class SizeUpdate
   end
 
   def stream_pre_update
-    ActionCable.server.broadcast "notifications:TEST", {html:
+    ActionCable.server.broadcast "notifications:size_change", {html:
       "<div class='alert alert-primary alert-block text-center'>
           Sending update sizes request to Recharge API....
       </div>"
@@ -91,18 +91,23 @@ class SizeUpdate
   end
 
   def stream_complete_update(response)
-      ActionCable.server.broadcast "notifications:TEST", {html:
+      results = response['order']['line_items'][0]['properties'].select do |hash|
+        %w{product_collection leggings sports-bra tops sports-jacket}.include? hash['name']
+      end
+
+      ActionCable.server.broadcast "notifications:size_change", {html:
     "<div class='alert alert-success alert-block text-center'>
-       #{response['order']['line_items']}
+       Order(#{@form_data['order_id']}) changes now reflected in Recharge: <p>#{results}</p>
+       *<a href='/customer/orders/#{@form_data['order_id']}'>Order</a> page may require refresh to show updated values
      </div>"
       }
   end
 
   def stream_failure(res2)
-      ActionCable.server.broadcast "notifications:TEST", {html:
+      ActionCable.server.broadcast "notifications:size_change", {html:
     "<div class='alert alert-danger alert-block text-center'>
         Recharge API Error: #{res2["errors"]}
-        Link to failed order <a href='/customer/orders/#{@form_data['order_id']}'>here</a>
+        Please correct error & resubmit Order(#{@form_data['order_id']}) <a href='/customer/orders/#{@form_data['order_id']}'>here</a>
      </div>"
       }
   end

@@ -9,7 +9,7 @@
           <% if pair['name'] == 'product_collection' %>
             <tr>
               <td>
-                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", disabled: true %>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", readonly: true %>
               </td>
               <td>
                 <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
@@ -30,10 +30,10 @@
           <% else %>
             <tr>
               <td>
-                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", disabled: true %>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", readonly: true %>
               </td>
               <td>
-                <%= f.text_field pair['name'], value: pair['value'], class: "form-control", disabled: true  %>
+                <%= f.text_field pair['name'], value: pair['value'], class: "form-control", readonly: true  %>
               </td>
             </tr>
           <% end %>
