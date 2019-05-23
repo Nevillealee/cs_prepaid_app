@@ -19,9 +19,20 @@ task 'batch_mass_request' => :environment do
 end
 
 desc 'upsert all data'
-task 'batch_mass_upsert' => :environment do  
+task 'batch_mass_upsert' => :environment do
   Resque.enqueue(Synchronize, 'customer')
   Resque.enqueue(Synchronize, 'address')
   Resque.enqueue(Synchronize, 'subscription')
   Resque.enqueue(Synchronize, 'order')
+end
+
+desc 'remove cancelled orders/subs'
+task 'batch_clean' => :environment do
+  ActiveRecord::Base.connection.execute("TRUNCATE subscriptions CASCADE")
+  Resque.enqueue(Synchronize, 'subscription')
+  Resque.enqueue(Harvest, 'subscription')
+
+  ActiveRecord::Base.connection.execute("TRUNCATE orders CASCADE")
+  Resque.enqueue(Synchronize, 'order')
+  Resque.enqueue(Harvest, 'order')
 end
