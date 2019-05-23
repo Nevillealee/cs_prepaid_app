@@ -45,7 +45,6 @@ class SizeUpdate
       Resque.logger.info "New Subscription sizes: #{sub.sizes}"
     else
       stream_failure
-      exit
       Resque.logger.error "SUB ##{sub.id} WAS NOT UPDATED IN DB OR RECHARGE!!!"
     end
 
@@ -94,7 +93,7 @@ class SizeUpdate
   def stream_complete_update(response)
       ActionCable.server.broadcast "notifications:TEST", {html:
     "<div class='alert alert-success alert-block text-center'>
-       #{response}
+       #{response['order']['line_items']}
      </div>"
       }
   end
