@@ -3,7 +3,12 @@ class Customer::OrdersController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    @orders = Order.where(customer_id: params[:customer_id],  status: "QUEUED")
+    @orders = Order
+    .where(
+      customer_id: params[:customer_id],
+      status: "QUEUED",
+      scheduled_at: ((Date.today.to_time)..(Date.today.next_month.end_of_month.to_time)))
+    .order('scheduled_at ASC')
   end
 
   def show

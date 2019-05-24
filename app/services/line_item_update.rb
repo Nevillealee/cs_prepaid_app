@@ -32,14 +32,25 @@ class LineItemUpdate
       "sku" => new_line_items['sku'],
       "product_title" => new_line_items['title'],
       "variant_title" => new_line_items['variant_title'],
-      "product_id" => new_line_items['product_id'].to_i,
-      "variant_id" => new_line_items['variant_id'].to_i,
+      "product_id" => new_line_items['shopify_product_id'].to_i,
+      "variant_id" => new_line_items['shopify_variant_id'].to_i,
       "subscription_id" => new_line_items['subscription_id'].to_i,
       "price" => new_line_items['price'].to_i
     }
+    new_local_line_item = {
+      "properties" => new_line_items['properties'].reduce({}, :update).map{|k, v| {'name' => k, 'value' => v}},
+      "quantity" => new_line_items['quantity'].to_i,
+      "sku" => new_line_items['sku'],
+      "product_title" => new_line_items['title'],
+      "variant_title" => new_line_items['variant_title'],
+      "shopify_product_id" => new_line_items['shopify_product_id'].to_i,
+      "shopify_variant_id" => new_line_items['shopify_variant_id'].to_i,
+      "subscription_id" => new_line_items['subscription_id'].to_i,
+      "price" => new_line_items['price'].to_i
+    }
+
     item_array.push(formatted_line_item)
     Resque.logger.warn "LINE_ITEMS BEFORE UPDATE: #{my_order.line_items}"
-    my_order.line_items = item_array
     my_hash = { "line_items" => item_array }
     body = my_hash.to_json
     Resque.logger.warn "JSON SENT TO RECHARGE: #{body}"
@@ -51,6 +62,7 @@ class LineItemUpdate
       :timeout => 80
     )
     if recharge_response.code == 200
+      my_order.line_items = [new_local_line_item]
       my_order.save!
       Resque.logger.warn "LINE_ITEMS AFTER UPDATE: #{my_order.line_items}"
       puts "Line_item update Done"
