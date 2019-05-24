@@ -16,6 +16,7 @@ class LineItemUpdate
   end
 
   def run
+    stream_pre_update
     Resque.logger = Logger.new("#{Rails.root}/log/order_updates.log", 5, 10024000)
     Resque.logger.level = Logger::INFO
     Resque.logger.info "received params: #{@form_data}"
@@ -31,8 +32,8 @@ class LineItemUpdate
       "sku" => new_line_items['sku'],
       "product_title" => new_line_items['title'],
       "variant_title" => new_line_items['variant_title'],
-      "product_id" => new_line_items['shopify_product_id'].to_i,
-      "variant_id" => new_line_items['shopify_variant_id'].to_i,
+      "product_id" => new_line_items['product_id'].to_i,
+      "variant_id" => new_line_items['variant_id'].to_i,
       "subscription_id" => new_line_items['subscription_id'].to_i,
       "price" => new_line_items['price'].to_i
     }
@@ -41,6 +42,7 @@ class LineItemUpdate
     my_order.line_items = item_array
     my_hash = { "line_items" => item_array }
     body = my_hash.to_json
+    Resque.logger.warn "JSON SENT TO RECHARGE: #{body}"
     # When updating line_items, you need to provide all the data that was in
     # line_items before, otherwise only new parameters will remain! (from Recharge docs)
     recharge_response = HTTParty.put("https://api.rechargeapps.com/orders/#{order_id}",
@@ -52,9 +54,41 @@ class LineItemUpdate
       my_order.save!
       Resque.logger.warn "LINE_ITEMS AFTER UPDATE: #{my_order.line_items}"
       puts "Line_item update Done"
+      stream_complete_update(recharge_response)
     else
       Resque.logger.error "SOMETHING WENT WRONG#{recharge_response}"
+      stream_failure(recharge_response)
     end
+  end
+
+  def stream_pre_update
+    ActionCable.server.broadcast "notifications:product_switch", {html:
+      "<div class='alert alert-primary alert-block text-center'>
+          Sending Subscription switch request to Recharge API....
+      </div>"
+      }
+  end
+
+  def stream_complete_update(res)
+    results = res['order']['line_items'][0]['properties'].select do |hash|
+      hash['name'] == 'product_collection'
+    end
+
+    ActionCable.server.broadcast "notifications:product_switch", {html:
+    "<div class='alert alert-success alert-block text-center'>
+      Subscription switched to #{results} in Recharge successfully!
+      *<a href='/customer/orders/#{@form_data['order_id']}'>Order</a> page may require refresh to show updated values
+     </div>"
+    }
+  end
+
+  def stream_failure(res)
+    ActionCable.server.broadcast "notifications:product_switch", {html:
+    "<div class='alert alert-danger alert-block text-center'>
+        Recharge API Error: #{res["errors"]}
+        <p>Please correct error & resubmit switch request <a href='/customer/orders/#{@form_data['order_id']}'>here</a></p>
+     </div>"
+    }
   end
 
 end

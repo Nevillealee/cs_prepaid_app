@@ -43,3 +43,28 @@
     margin-bottom: 25px;
   }
 }
+
+.update-confirmation-wrapper {
+  text-align: center;
+  margin-bottom: 25px;
+
+  p {
+    color: green;
+    font-weight: 700;
+  }
+
+  li {
+    list-style: none;
+
+    span {
+      font-weight: 700;
+    }
+  }
+}
+
+.update-confirmation-inner-wrapper {
+  background: #fff;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px;
+}
