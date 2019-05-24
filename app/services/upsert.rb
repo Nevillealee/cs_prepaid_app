@@ -27,7 +27,7 @@ class Upsert
     Resque.logger.info "#{@entity} batches in redis before import: #{temp.size}"
     # active-import columns to save
     temp.try(:each) do |my_hashes|
-      # Rails (db user given in env or config) must have superuser privilleges 
+      # Rails (db user given in env or config) must have superuser privilleges
       ActiveRecord::Base.connection.disable_referential_integrity do
         my_class.import(my_columns, my_hashes, batch_size: 10000, on_duplicate_key_update: :all)
       end

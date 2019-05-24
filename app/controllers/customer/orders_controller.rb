@@ -24,7 +24,6 @@ class Customer::OrdersController < ApplicationController
                   recharge_token: ENV['RECHARGE_TOKEN'],
                  }
     recharge_line_item_update(all_params)
-    flash[:confirmation] = line_item_params
     redirect_to :action => "show", :id => params[:id]
   end
 
@@ -42,7 +41,6 @@ class Customer::OrdersController < ApplicationController
                   recharge_token: ENV['RECHARGE_TOKEN'],
                  }
     recharge_size_update(all_params)
-    flash[:confirmation] = line_item_params
     redirect_to :action => "show", :id => params[:id]
   end
 
@@ -60,7 +58,9 @@ class Customer::OrdersController < ApplicationController
       :variant_title,
       :subscription_id,
       :shopify_product_id,
-      :shopify_variant_id
+      :shopify_variant_id,
+      :product_id,
+      :variant_id
     )
   end
 
