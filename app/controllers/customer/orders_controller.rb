@@ -27,6 +27,7 @@ class Customer::OrdersController < ApplicationController
                   prop_params: properties_params,
                   order_id: params[:id],
                   recharge_token: ENV['RECHARGE_TOKEN'],
+                  current_user_id: current_user.id,
                  }
     recharge_line_item_update(all_params)
     redirect_to :action => "show", :id => params[:id]
@@ -44,6 +45,7 @@ class Customer::OrdersController < ApplicationController
                   prop_params: properties_params,
                   order_id: params[:id],
                   recharge_token: ENV['RECHARGE_TOKEN'],
+                  current_user_id: current_user.id,
                  }
     recharge_size_update(all_params)
     redirect_to :action => "show", :id => params[:id]

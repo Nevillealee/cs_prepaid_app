@@ -13,6 +13,7 @@ class LineItemUpdate
       'Accept' => 'application/json',
       'Content-Type' => 'application/json'
     }
+    @my_user_id = arg["current_user_id"]
   end
 
   def run
@@ -37,7 +38,7 @@ class LineItemUpdate
       "subscription_id" => new_line_items['subscription_id'].to_i,
       "price" => new_line_items['price'].to_i
     }
-    
+
     new_local_line_item = {
       "properties" => new_line_items['properties'].reduce({}, :update).map{|k, v| {'name' => k, 'value' => v}},
       "quantity" => new_line_items['quantity'].to_i,
@@ -75,7 +76,7 @@ class LineItemUpdate
   end
 
   def stream_pre_update
-    ActionCable.server.broadcast "notifications:product_switch", {html:
+    ActionCable.server.broadcast "notifications:#{@my_user_id}", {html:
       "<div class='alert alert-primary alert-block text-center'>
           Sending Subscription switch request to Recharge API....
       </div>"
@@ -87,7 +88,7 @@ class LineItemUpdate
       hash['name'] == 'product_collection'
     end
 
-    ActionCable.server.broadcast "notifications:product_switch", {html:
+    ActionCable.server.broadcast "notifications:#{@my_user_id}", {html:
     "<div class='alert alert-success alert-block text-center'>
       Subscription switched to #{results} in Recharge successfully!
       *<a href='/customer/orders/#{@form_data['order_id']}'>Order</a> page may require refresh to show updated values
@@ -96,7 +97,7 @@ class LineItemUpdate
   end
 
   def stream_failure(res)
-    ActionCable.server.broadcast "notifications:product_switch", {html:
+    ActionCable.server.broadcast "notifications:#{@my_user_id}", {html:
     "<div class='alert alert-danger alert-block text-center'>
         Recharge API Error: #{res["errors"]}
         <p>Please correct error & resubmit switch request <a href='/customer/orders/#{@form_data['order_id']}'>here</a></p>

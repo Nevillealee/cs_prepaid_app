@@ -9,6 +9,7 @@ class SizeUpdate
 
   def initialize(arg)
     @form_data = arg
+    @my_user_id = arg["current_user_id"]
   end
 
   def run
@@ -83,7 +84,7 @@ class SizeUpdate
   end
 
   def stream_pre_update
-    ActionCable.server.broadcast "notifications:size_change", {html:
+    ActionCable.server.broadcast "notifications:#{@my_user_id}", {html:
       "<div class='alert alert-primary alert-block text-center'>
           Sending update sizes request to Recharge API....
       </div>"
@@ -95,7 +96,7 @@ class SizeUpdate
         %w{product_collection leggings sports-bra tops sports-jacket}.include? hash['name']
       end
 
-      ActionCable.server.broadcast "notifications:size_change", {html:
+      ActionCable.server.broadcast "notifications:#{@my_user_id}", {html:
     "<div class='alert alert-success alert-block text-center'>
        Order(#{@form_data['order_id']}) changes now reflected in Recharge: <p>#{results}</p>
        *<a href='/customer/orders/#{@form_data['order_id']}'>Order</a> page may require refresh to show updated values
@@ -104,7 +105,7 @@ class SizeUpdate
   end
 
   def stream_failure(res2)
-      ActionCable.server.broadcast "notifications:size_change", {html:
+      ActionCable.server.broadcast "notifications:#{@my_user_id}", {html:
     "<div class='alert alert-danger alert-block text-center'>
         Recharge API Error: #{res2["errors"]}
         Please correct error & resubmit Order(#{@form_data['order_id']}) <a href='/customer/orders/#{@form_data['order_id']}'>here</a>
