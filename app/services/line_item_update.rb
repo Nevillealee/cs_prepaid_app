@@ -37,6 +37,7 @@ class LineItemUpdate
       "subscription_id" => new_line_items['subscription_id'].to_i,
       "price" => new_line_items['price'].to_i
     }
+    
     new_local_line_item = {
       "properties" => new_line_items['properties'].reduce({}, :update).map{|k, v| {'name' => k, 'value' => v}},
       "quantity" => new_line_items['quantity'].to_i,
