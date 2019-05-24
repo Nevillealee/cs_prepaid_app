@@ -58,7 +58,9 @@ class Customer::OrdersController < ApplicationController
       :variant_title,
       :subscription_id,
       :shopify_product_id,
-      :shopify_variant_id
+      :shopify_variant_id,
+      :product_id,
+      :variant_id
     )
   end
 
