@@ -4,7 +4,7 @@ ReCharge Checkout API web interface for [Shopify](https://www.shopify.com/)
 [![Maintainability](https://api.codeclimate.com/v1/badges/3c0a827712ad8431c695/maintainability)](https://codeclimate.com/github/Nevillealee/cs_prepaid_app/maintainability)
 
 Updates Prepaid Subscriptions through easy-to-use GUI. Features Administrative User functionality,
-asynchronous API -> database syncing via batching, and a browser compatible background job monitoring.
+asynchronous API -> database syncing via batching, and real time background job updates via websockets (Action Cable)
 
 ## Installation
 
