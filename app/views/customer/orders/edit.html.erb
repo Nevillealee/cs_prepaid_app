@@ -9,16 +9,16 @@
           <% if pair['name'] == 'product_collection' %>
             <tr>
               <td>
-                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", disabled: true %>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", readonly: true %>
               </td>
               <td>
-                <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
+                <%= f.text_field pair['name'], value: pair['value'], class: "form-control", autofocus: true %>                
               </td>
             </tr>
           <% end %>
         <% end %>
         <% @order.line_items[0]['properties'].each do |pair| %>
-          <% if pair['name'] == 'leggings' || pair['name'] == 'sports-bra' || pair['name'] == 'tops' || pair['name'] == 'gloves' || pair['name'] == 'sports-jacket' || pair['name'] == 'product_collection' %>
+          <% if pair['name'] == 'leggings' || pair['name'] == 'sports-bra' || pair['name'] == 'tops' || pair['name'] == 'gloves' || pair['name'] == 'sports-jacket' %>
             <tr style="display: none;">
               <td>
                 <%= f.text_field pair['name'], value: pair['name'], class: "form-control" %>
@@ -27,13 +27,14 @@
                 <%= f.text_field pair['name'], value: pair['value'], class: "form-control" %>
               </td>
             </tr>
+          <% elsif pair['name'] == 'product_collection' %>
           <% else %>
             <tr>
               <td>
-                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", disabled: true %>
+                <%= f.text_field pair['name'], value: pair['name'], class: "form-control", readonly: true %>
               </td>
               <td>
-                <%= f.text_field pair['name'], value: pair['value'], class: "form-control", disabled: true  %>
+                <%= f.text_field pair['name'], value: pair['value'], class: "form-control", readonly: true  %>
               </td>
             </tr>
           <% end %>
@@ -53,7 +54,7 @@
         <% end %>
       </tbody>
     </table>
-    <%= f.submit 'Update', :class => 'btn btn-info' %>
+    <%= f.submit 'Update', :class => 'btn btn-info', data: { confirm: 'Are you sure you want to update this Order?' } %>
   <% end %>
 </div>
 

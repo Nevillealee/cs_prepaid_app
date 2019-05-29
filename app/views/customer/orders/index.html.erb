@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th>Order #</th>
+      <th>Subscription id</th>
       <th>Date</th>
       <th>Total</th>
       <th>Transaction Status</th>
@@ -16,6 +17,7 @@
             <%= order.id %>
           <% end %>
         </td>
+        <td><%= order.line_items[0]['subscription_id'] %></td>
         <td><%= order.scheduled_at.strftime('%B %d, %Y')  %></td>
         <td><%= number_to_currency(order.total_price) %></td>
         <td><%= order.status %></td>

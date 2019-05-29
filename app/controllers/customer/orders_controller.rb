@@ -3,7 +3,12 @@ class Customer::OrdersController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    @orders = Order.where(customer_id: params[:customer_id],  status: "QUEUED")
+    @orders = Order
+    .where(
+      customer_id: params[:customer_id],
+      status: "QUEUED",
+      scheduled_at: ((Date.today.to_time)..(Date.today.next_month.end_of_month.to_time)))
+    .order('scheduled_at ASC')
   end
 
   def show
@@ -22,9 +27,9 @@ class Customer::OrdersController < ApplicationController
                   prop_params: properties_params,
                   order_id: params[:id],
                   recharge_token: ENV['RECHARGE_TOKEN'],
+                  current_user_id: current_user.id,
                  }
     recharge_line_item_update(all_params)
-    flash[:confirmation] = properties_params
     redirect_to :action => "show", :id => params[:id]
   end
 
@@ -40,9 +45,9 @@ class Customer::OrdersController < ApplicationController
                   prop_params: properties_params,
                   order_id: params[:id],
                   recharge_token: ENV['RECHARGE_TOKEN'],
+                  current_user_id: current_user.id,
                  }
     recharge_size_update(all_params)
-    flash[:confirmation] = properties_params
     redirect_to :action => "show", :id => params[:id]
   end
 
@@ -60,7 +65,9 @@ class Customer::OrdersController < ApplicationController
       :variant_title,
       :subscription_id,
       :shopify_product_id,
-      :shopify_variant_id
+      :shopify_variant_id,
+      :product_id,
+      :variant_id
     )
   end
 

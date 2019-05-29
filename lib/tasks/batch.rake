@@ -19,9 +19,15 @@ task 'batch_mass_request' => :environment do
 end
 
 desc 'upsert all data'
-task 'batch_mass_upsert' => :environment do  
+task 'batch_mass_upsert' => :environment do
   Resque.enqueue(Synchronize, 'customer')
   Resque.enqueue(Synchronize, 'address')
   Resque.enqueue(Synchronize, 'subscription')
   Resque.enqueue(Synchronize, 'order')
+end
+
+# removes cancelled Orders and Subscriptions from db
+desc 'remove invalid Orders from db'
+task 'clean_database' => :environment do
+  Resque.enqueue(CleanDb)
 end
