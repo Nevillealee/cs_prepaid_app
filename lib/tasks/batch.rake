@@ -27,13 +27,7 @@ task 'batch_mass_upsert' => :environment do
 end
 
 # removes cancelled Orders and Subscriptions from db
-desc 'remove cancelled orders/subs'
-task 'batch_clean' => :environment do
-  ActiveRecord::Base.connection.execute("TRUNCATE subscriptions CASCADE")
-  Resque.enqueue(Synchronize, 'subscription')
-  Resque.enqueue(Harvest, 'subscription')
-
-  ActiveRecord::Base.connection.execute("TRUNCATE orders CASCADE")
-  Resque.enqueue(Synchronize, 'order')
-  Resque.enqueue(Harvest, 'order')
+desc 'remove invalid Orders from db'
+task 'clean_database' => :environment do
+  Resque.enqueue(CleanDb)
 end
