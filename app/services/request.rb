@@ -2,20 +2,34 @@ require Rails.root.join('app', 'helpers','requestable.rb')
 
 # caches Recharge batch data in Redis
 class Request
-  include Requestable
+  include RequestHelper
   Resque.logger = Logger.new("#{Rails.root}/log/batch_request.log", 5, 10024000)
   Resque.logger.level = Logger::INFO
 
   def initialize(arg)
     @entity = arg
+    recharge_regular = ENV['RECHARGE_TOKEN']
+    @sleep_recharge = ENV['RECHARGE_SLEEP_TIME']
+    @my_header = {
+      "X-Recharge-Access-Token" => recharge_regular
+    }
+    @uri = URI.parse(ENV['DATABASE_URL'])
+    @my_params = {'header' => @my_header, 'uri' => @uri, 'sleep' => @sleep_recharge, 'entity' => @entity}
   end
 
   def run
-    Resque.logger.info "Harvest.perform params recieved: #{@entity.inspect}"
-    my_class = @entity.camelize.constantize
-    my_min_max = min_max
-    params = query_params(@entity, my_min_max)
-    my_class.new.fetch(params)
+    case @entity
+    when 'customer'
+      customer_pull(@my_params)
+    when 'subscription'
+      subscription_pull(@my_params)
+    when 'address'
+      address_pull(@my_params)
+    when 'order'
+      order_pull(@my_params)
+    else
+      Resque.logger "Invalid argument: #{@entity}"
+    end
   end
 
   private
