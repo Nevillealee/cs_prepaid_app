@@ -68,13 +68,6 @@ class Request
   #   end
   # end
 
-  # def min_max
-  #   my_yesterday = Date.today - 1
-  #   my_yesterday_str = my_yesterday.strftime('%Y-%m-%d')
-  #   my_four_months = Date.today >> 4
-  #   my_four_months = my_four_months.end_of_month
-  #   my_four_months_str = my_four_months.strftime('%Y-%m-%d')
-  #   my_hash = { min: my_yesterday_str, max: my_four_months_str }
-  # end
+
 
 end
