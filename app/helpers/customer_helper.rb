@@ -53,6 +53,7 @@ module CustomerHelper
       determine_limits(recharge_limit, 0.65)
     end
     my_conn.close
+    puts "DONE"
   end
 
   def customer_partial_pull(params)
@@ -60,7 +61,7 @@ module CustomerHelper
     Resque.logger.level = Logger::INFO
     puts "Customer partial_pull params recieved: #{@entity.inspect}"
 
-    puts "Hi there getting all customers"
+    puts "Hi there getting customers from the last 25 minutes"
     puts params.inspect
     my_header = params['header']
     myuri = params['uri']
@@ -110,15 +111,6 @@ module CustomerHelper
       determine_limits(recharge_limit, 0.75)
     end
     my_conn.close
-  end
-
-  def twenty_five_min
-    min_ago = 25
-    minutes_ago = DateTime.now.in_time_zone - (min_ago/1440.0)
-    puts "running configure timezone: #{Time.zone.inspect}"
-    twenty_five_minutes_ago_str = minutes_ago.strftime("%Y-%m-%dT%H:%M:%S")
-    puts "Twenty five minutes ago = #{twenty_five_minutes_ago_str}"
-    Resque.logger.info "Twenty five minutes ago = #{twenty_five_minutes_ago_str}"
-    return twenty_five_minutes_ago_str
+    puts "DONE"
   end
 end

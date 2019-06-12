@@ -2,11 +2,12 @@ Dir["#{Rails.root}/app/helpers/*.rb"].each { |file| require file }
 
 class Request
   include RechargeLimiting
+  include TwentyFive
   include CustomerHelper
   include AddressHelper
   include OrderHelper
   include SubscriptionHelper
-  
+
   Resque.logger = Logger.new("#{Rails.root}/log/request_worker.log", 5, 10024000)
   Resque.logger.level = Logger::INFO
 
