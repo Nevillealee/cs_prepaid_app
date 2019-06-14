@@ -13,11 +13,10 @@ module AddressHelper
     Resque.logger.info "We have #{num_addresses} addresses"
 
     Address.delete_all
-    ActiveRecord::Base.connection.reset_pk_sequence!('addresses')
 
     my_conn =  PG.connect(myuri.hostname, myuri.port, nil, nil, myuri.path[1..-1], myuri.user, myuri.password)
     puts "my_conn: #{my_conn}"
-    my_insert = "insert into addresses (id, customer_id, created_at, updated_at, address1, address2, city, province, country, first_name, last_name, zip, company, phone, cart_note, note_attributes, shipping_lines_override, discount_id ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, created_at = EXCLUDED.created_at, updated_at = EXCLUDED.updated_at, address1 = EXCLUDED.address1, address2 = EXCLUDED.address2, city = EXCLUDED.city, province = EXCLUDED.province, country = EXCLUDED.country, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, zip = EXCLUDED.zip, company = EXCLUDED.company, phone = EXCLUDED.phone, cart_note = EXCLUDED.cart_note, note_attributes = EXCLUDED.note_attributes, shipping_lines_override = EXCLUDED.shipping_lines_override, discount_id = EXCLUDED.discount_id;"
+    my_insert = "insert into addresses (id, customer_id, created_at, updated_at, address1, address2, city, province, country, first_name, last_name, zip, company, phone, cart_note, note_attributes, shipping_lines_override, discount_id ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, created_at = EXCLUDED.created_at, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, company = EXCLUDED.company, cart_note = EXCLUDED.cart_note, note_attributes = EXCLUDED.note_attributes, shipping_lines_override = EXCLUDED.shipping_lines_override, discount_id = EXCLUDED.discount_id;"
     my_conn.prepare('statement1', "#{my_insert}")
 
     start = Time.now
@@ -78,7 +77,7 @@ module AddressHelper
 
     my_conn =  PG.connect(myuri.hostname, myuri.port, nil, nil, myuri.path[1..-1], myuri.user, myuri.password)
     puts "my_conn: #{my_conn}"
-    my_insert = "insert into addresses (id, customer_id, created_at, updated_at, address1, address2, city, province, country, first_name, last_name, zip, company, phone, cart_note, note_attributes, shipping_lines_override, discount_id ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, created_at = EXCLUDED.created_at, updated_at = EXCLUDED.updated_at, address1 = EXCLUDED.address1, address2 = EXCLUDED.address2, city = EXCLUDED.city, province = EXCLUDED.province, country = EXCLUDED.country, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, zip = EXCLUDED.zip, company = EXCLUDED.company, phone = EXCLUDED.phone, cart_note = EXCLUDED.cart_note, note_attributes = EXCLUDED.note_attributes, shipping_lines_override = EXCLUDED.shipping_lines_override, discount_id = EXCLUDED.discount_id;"
+    my_insert = "insert into addresses (id, customer_id, created_at, updated_at, address1, address2, city, province, country, first_name, last_name, zip, company, phone, cart_note, note_attributes, shipping_lines_override, discount_id ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, created_at = EXCLUDED.created_at, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, company = EXCLUDED.company, cart_note = EXCLUDED.cart_note, note_attributes = EXCLUDED.note_attributes, shipping_lines_override = EXCLUDED.shipping_lines_override, discount_id = EXCLUDED.discount_id;"
     my_conn.prepare('statement1', "#{my_insert}")
 
     start = Time.now

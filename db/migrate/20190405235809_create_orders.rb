@@ -1,11 +1,11 @@
-# 
+#
 
 class CreateOrders < ActiveRecord::Migration[5.2]
   def change
     create_table :orders do |t|
       # rails 5.1 >= primary key bigint by default
-      t.references :customer, foreign_key: true
-      t.references :address, foreign_key: true
+      t.references :customer, foreign_key: false
+      t.references :address, foreign_key: false
       t.bigint :charge_id
       t.string :transaction_id
       # shopify_id depreciated by ReCharge

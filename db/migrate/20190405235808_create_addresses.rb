@@ -1,9 +1,9 @@
-# 
+#
 
 class CreateAddresses < ActiveRecord::Migration[5.2]
   def change
     create_table :addresses do |t|
-      t.references :customer, foreign_key: true
+      t.references :customer, foreign_key: false
       t.datetime :created_at
       t.datetime :updated_at
       t.string :address1

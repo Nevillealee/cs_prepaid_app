@@ -1,10 +1,10 @@
-# 
+#
 
 class CreateSubscriptions < ActiveRecord::Migration[5.2]
   def change
     create_table :subscriptions do |t|
-      t.references :address, foreign_key: true
-      t.references :customer, foreign_key: true
+      t.references :address, foreign_key: false
+      t.references :customer, foreign_key: false
       t.datetime :created_at
       t.datetime :updated_at
       t.datetime :next_charge_scheduled_at

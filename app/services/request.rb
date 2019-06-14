@@ -48,26 +48,4 @@ class Request
     end
   end
 
-
-  # def query_params(ent, minn_maxx)
-  #   min = minn_maxx[:min]
-  #   max = minn_maxx[:max]
-  #   case ent
-  #   when 'customer'
-  #     { query: 'status=active', entity: ent }
-  #   when 'order'
-  #     Resque.logger.warn "Order query min: #{min}, max: #{max}"
-  #     { query: "scheduled_at_min=#{min}&scheduled_at_max=#{max}&status=queued", entity: ent }
-  #   when 'address'
-  #     { query: "created_at_max=#{Date.today.strftime('%Y-%m-%d')}", entity: ent}
-  #   when 'subscription'
-  #     { query: 'status=active', entity: ent }
-  #   when 'order_line_item'
-  #   else
-  #     Resque.logger.warn "rake task argument: #{ent} is invalid!!!"
-  #   end
-  # end
-
-
-
 end

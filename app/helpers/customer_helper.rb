@@ -15,11 +15,10 @@ module CustomerHelper
     Resque.logger.debug "We have #{num_customers} ACTIVE customers"
 
     Customer.delete_all
-    ActiveRecord::Base.connection.reset_pk_sequence!('customers')
 
     my_conn =  PG.connect(myuri.hostname, myuri.port, nil, nil, myuri.path[1..-1], myuri.user, myuri.password)
     puts "my_conn: #{my_conn}"
-    my_insert = "insert into customers (id, shopify_customer_id, email, created_at, updated_at, status, first_name, last_name, has_card_error_in_dunning, number_subscriptions, number_active_subscriptions, first_charge_processed_at ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (id) DO UPDATE SET shopify_customer_id = EXCLUDED.shopify_customer_id, email = EXCLUDED.email, created_at = EXCLUDED.created_at, updated_at = EXCLUDED.updated_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, has_card_error_in_dunning = EXCLUDED.has_card_error_in_dunning, number_subscriptions = EXCLUDED.number_subscriptions, number_active_subscriptions = EXCLUDED.number_active_subscriptions, first_charge_processed_at = EXCLUDED.first_charge_processed_at;"
+    my_insert = "insert into customers (id, shopify_customer_id, email, created_at, updated_at, status, first_name, last_name, has_card_error_in_dunning, number_subscriptions, number_active_subscriptions, first_charge_processed_at ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (id) DO UPDATE SET shopify_customer_id = EXCLUDED.shopify_customer_id, created_at = EXCLUDED.created_at, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, has_card_error_in_dunning = EXCLUDED.has_card_error_in_dunning, first_charge_processed_at = EXCLUDED.first_charge_processed_at;"
     my_conn.prepare('statement1', "#{my_insert}")
 
     start = Time.now
@@ -78,7 +77,7 @@ module CustomerHelper
     my_conn =  PG.connect(myuri.hostname, myuri.port, nil, nil, myuri.path[1..-1], myuri.user, myuri.password)
     puts "my_conn: #{my_conn}"
 
-    my_insert = "insert into customers (id, shopify_customer_id, email, created_at, updated_at, status, first_name, last_name, has_card_error_in_dunning, number_subscriptions, number_active_subscriptions, first_charge_processed_at ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (id) DO UPDATE SET shopify_customer_id = EXCLUDED.shopify_customer_id, email = EXCLUDED.email, created_at = EXCLUDED.created_at, updated_at = EXCLUDED.updated_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, has_card_error_in_dunning = EXCLUDED.has_card_error_in_dunning, number_subscriptions = EXCLUDED.number_subscriptions, number_active_subscriptions = EXCLUDED.number_active_subscriptions, first_charge_processed_at = EXCLUDED.first_charge_processed_at;"
+    my_insert = "insert into customers (id, shopify_customer_id, email, created_at, updated_at, status, first_name, last_name, has_card_error_in_dunning, number_subscriptions, number_active_subscriptions, first_charge_processed_at ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (id) DO UPDATE SET shopify_customer_id = EXCLUDED.shopify_customer_id, created_at = EXCLUDED.created_at, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, has_card_error_in_dunning = EXCLUDED.has_card_error_in_dunning, first_charge_processed_at = EXCLUDED.first_charge_processed_at;"
     my_conn.prepare('statement1', "#{my_insert}")
 
     start = Time.now
@@ -108,7 +107,7 @@ module CustomerHelper
       current = Time.now
       duration = (current - start).ceil
       puts "Running #{duration} seconds"
-      determine_limits(recharge_limit, 0.75)
+      determine_limits(recharge_limit, 0.65)
     end
     my_conn.close
     puts "DONE"

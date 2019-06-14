@@ -1,9 +1,8 @@
 class Order < ApplicationRecord
   include Requestable
 
-  has_many :order_line_items
+  has_many :order_line_items, dependent: :delete_all
   # i.e. order contains multiple recurring subscriptions purchased at once
-  has_many :subscriptions, through: :order_line_items
   belongs_to :customer, optional: true
   belongs_to :address, optional: true
   SIZE_PROPERTIES = ['leggings', 'tops', 'sports-jacket', 'sports-bra', 'gloves'].freeze

@@ -18,18 +18,23 @@ module OrderHelper
     Resque.logger.info "We have #{num_orders} orders"
 
     Order.delete_all
-    ActiveRecord::Base.connection.reset_pk_sequence!('orders')
+    ActiveRecord::Base.connection.reset_pk_sequence!('order_line_items')
 
     my_conn =  PG.connect(myuri.hostname, myuri.port, nil, nil, myuri.path[1..-1], myuri.user, myuri.password)
     puts "my_conn: #{my_conn}"
     my_insert = "insert into orders (id, customer_id, address_id, charge_id, transaction_id, shopify_order_id, shopify_order_number,
       processed_at, status, first_name, last_name, email, payment_processor, scheduled_at,
       is_prepaid, line_items, shipping_address, total_price, billing_address, created_at, updated_at)
-      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, address_id = EXCLUDED.address_id, charge_id = EXCLUDED.charge_id,
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, charge_id = EXCLUDED.charge_id,
       transaction_id = EXCLUDED.transaction_id, shopify_order_id = EXCLUDED.shopify_order_id, shopify_order_number = EXCLUDED.shopify_order_number,
-      processed_at = EXCLUDED.processed_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, payment_processor = EXCLUDED.payment_processor, scheduled_at = EXCLUDED.scheduled_at,
-      is_prepaid = EXCLUDED.is_prepaid, line_items = EXCLUDED.line_items, shipping_address = EXCLUDED.shipping_address, total_price = EXCLUDED.total_price, billing_address = EXCLUDED.billing_address, created_at = EXCLUDED.created_at, updated_at = EXCLUDED.updated_at;"
+      processed_at = EXCLUDED.processed_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, payment_processor = EXCLUDED.payment_processor,
+      is_prepaid = EXCLUDED.is_prepaid, total_price = EXCLUDED.total_price, created_at = EXCLUDED.created_at;"
     my_conn.prepare('statement1', "#{my_insert}")
+
+    order_line_insert = "insert into order_line_items (order_id, subscription_id, grams, price,
+    quantity, shopify_product_id, shopify_variant_id, properties, product_title,  sku, variant_title,
+    created_at, updated_at) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13);"
+    my_conn.prepare('statement2', "#{order_line_insert}")
 
     start = Time.now
     page_size = 250
@@ -56,19 +61,38 @@ module OrderHelper
         payment_processor = my_order['payment_processor']
         scheduled_at = my_order['scheduled_at']
         is_prepaid = my_order['is_prepaid']
-        line_items = my_order['line_items'].to_json
         shipping_address = my_order['shipping_address'].to_json
         total_price = my_order['total_price']
         billing_address = my_order['billing_address'].to_json
         created_at = my_order['created_at']
         updated_at = my_order['updated_at']
+        line_items = my_order['line_items'].to_json
 
+        raw_line_items = my_order['line_items'][0]
+        subscription_id = raw_line_items['subscription_id'].to_i
+        grams = raw_line_items['grams'].to_i
+        price = raw_line_items['price']
+        quantity = raw_line_items['quantity']
+        properties = raw_line_items['properties'].to_json
+        product_title = raw_line_items['product_title']
+        shopify_product_id = raw_line_items['shopify_product_id'].to_i
+        shopify_variant_id = raw_line_items['shopify_variant_id'].to_i
+        sku = raw_line_items['sku']
+        variant_title = raw_line_items['variant_title']
+
+        my_delete = "delete from order_line_items where order_id = \'#{id}\'"
+        my_conn.exec(my_delete)
         my_conn.exec_prepared(
           'statement1', [id, customer_id, address_id, charge_id, transaction_id,
           shopify_order_id, shopify_order_number, processed_at, status, first_name, last_name, email,
           payment_processor, scheduled_at, is_prepaid, line_items, shipping_address, total_price,
           billing_address, created_at, updated_at]
         )
+
+        my_conn.exec_prepared(
+          'statement2', [id, subscription_id, grams, price, quantity, shopify_product_id,
+            shopify_variant_id, properties, product_title, sku, variant_title, created_at, updated_at]
+          )
       end
       puts "Done with page #{page}/#{num_pages}"
       current = Time.now
@@ -105,10 +129,10 @@ module OrderHelper
     my_insert = "insert into orders (id, customer_id, address_id, charge_id, transaction_id, shopify_order_id, shopify_order_number,
       processed_at, status, first_name, last_name, email, payment_processor, scheduled_at,
       is_prepaid, line_items, shipping_address, total_price, billing_address, created_at, updated_at)
-      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, address_id = EXCLUDED.address_id, charge_id = EXCLUDED.charge_id,
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, charge_id = EXCLUDED.charge_id,
       transaction_id = EXCLUDED.transaction_id, shopify_order_id = EXCLUDED.shopify_order_id, shopify_order_number = EXCLUDED.shopify_order_number,
-      processed_at = EXCLUDED.processed_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, payment_processor = EXCLUDED.payment_processor, scheduled_at = EXCLUDED.scheduled_at,
-      is_prepaid = EXCLUDED.is_prepaid, line_items = EXCLUDED.line_items, shipping_address = EXCLUDED.shipping_address, total_price = EXCLUDED.total_price, billing_address = EXCLUDED.billing_address, created_at = EXCLUDED.created_at, updated_at = EXCLUDED.updated_at;"
+      processed_at = EXCLUDED.processed_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, payment_processor = EXCLUDED.payment_processor,
+      is_prepaid = EXCLUDED.is_prepaid, total_price = EXCLUDED.total_price, created_at = EXCLUDED.created_at;"
     my_conn.prepare('statement1', "#{my_insert}")
 
     start = Time.now

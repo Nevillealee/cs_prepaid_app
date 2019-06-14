@@ -3,8 +3,7 @@ class Subscription < ApplicationRecord
 
   belongs_to :customer, optional: true
   belongs_to :address, optional: true
-  has_many :line_items
-  has_many :orders, through: :order_line_items
+  has_many :order_line_items, dependent: :delete_all
 
   SIZE_PROPERTIES = ['leggings', 'tops', 'sports-jacket', 'sports-bra', 'gloves'].freeze
 
