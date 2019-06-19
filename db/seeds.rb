@@ -6,4 +6,4 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 # email confirmation required
-admin = User.create!(email: 'CHANGEME@FAKE.com', password: 'CHANGEMETOO', password_confirmation: 'CHANGEMETHREE', admin: true,  first_name: 'IIII', last_name: 'ReadInstructions', confirmed_at: Time.now )
+admin = User.create!(email: ENV['SEED_EMAIL'], password: ENV['SEED_PW'], password_confirmation: ENV['SEED_PW'], admin: true,  first_name: 'Test', last_name: 'Admin', confirmed_at: Time.now )
