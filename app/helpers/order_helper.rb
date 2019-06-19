@@ -25,10 +25,9 @@ module OrderHelper
     my_insert = "insert into orders (id, customer_id, address_id, charge_id, transaction_id, shopify_order_id, shopify_order_number,
       processed_at, status, first_name, last_name, email, payment_processor, scheduled_at,
       is_prepaid, line_items, shipping_address, total_price, billing_address, created_at, updated_at)
-      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, charge_id = EXCLUDED.charge_id,
-      transaction_id = EXCLUDED.transaction_id, shopify_order_id = EXCLUDED.shopify_order_id, shopify_order_number = EXCLUDED.shopify_order_number,
-      processed_at = EXCLUDED.processed_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, payment_processor = EXCLUDED.payment_processor,
-      is_prepaid = EXCLUDED.is_prepaid, total_price = EXCLUDED.total_price, created_at = EXCLUDED.created_at;"
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) ON CONFLICT (id) DO UPDATE SET shopify_order_id = EXCLUDED.shopify_order_id, shopify_order_number = EXCLUDED.shopify_order_number,
+      processed_at = EXCLUDED.processed_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, payment_processor = EXCLUDED.payment_processor, scheduled_at = EXCLUDED.scheduled_at,
+      is_prepaid = EXCLUDED.is_prepaid, total_price = EXCLUDED.total_price, line_items = EXCLUDED.line_items, shipping_address = EXCLUDED.shipping_address, billing_address = EXCLUDED.billing_address;"
     my_conn.prepare('statement1', "#{my_insert}")
 
     order_line_insert = "insert into order_line_items (order_id, subscription_id, grams, price,
@@ -121,18 +120,14 @@ module OrderHelper
     num_orders = my_response['count'].to_i
     Resque.logger.info "We have #{num_orders} orders updated since twenty five minutes ago: #{twenty_five_minutes_ago_str}"
 
-    Order.delete_all
-    ActiveRecord::Base.connection.reset_pk_sequence!('orders')
-
     my_conn =  PG.connect(myuri.hostname, myuri.port, nil, nil, myuri.path[1..-1], myuri.user, myuri.password)
     puts "my_conn: #{my_conn}"
     my_insert = "insert into orders (id, customer_id, address_id, charge_id, transaction_id, shopify_order_id, shopify_order_number,
       processed_at, status, first_name, last_name, email, payment_processor, scheduled_at,
       is_prepaid, line_items, shipping_address, total_price, billing_address, created_at, updated_at)
-      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) ON CONFLICT (id) DO UPDATE SET customer_id = EXCLUDED.customer_id, charge_id = EXCLUDED.charge_id,
-      transaction_id = EXCLUDED.transaction_id, shopify_order_id = EXCLUDED.shopify_order_id, shopify_order_number = EXCLUDED.shopify_order_number,
-      processed_at = EXCLUDED.processed_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, payment_processor = EXCLUDED.payment_processor,
-      is_prepaid = EXCLUDED.is_prepaid, total_price = EXCLUDED.total_price, created_at = EXCLUDED.created_at;"
+      values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21) ON CONFLICT (id) DO UPDATE SET shopify_order_id = EXCLUDED.shopify_order_id, shopify_order_number = EXCLUDED.shopify_order_number,
+      processed_at = EXCLUDED.processed_at, status = EXCLUDED.status, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, payment_processor = EXCLUDED.payment_processor, scheduled_at = EXCLUDED.scheduled_at,
+      is_prepaid = EXCLUDED.is_prepaid, total_price = EXCLUDED.total_price, line_items = EXCLUDED.line_items, shipping_address = EXCLUDED.shipping_address, billing_address = EXCLUDED.billing_address;"
     my_conn.prepare('statement1', "#{my_insert}")
 
     start = Time.now

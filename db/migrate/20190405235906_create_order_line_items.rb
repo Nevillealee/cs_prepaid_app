@@ -4,7 +4,7 @@ class CreateOrderLineItems < ActiveRecord::Migration[5.2]
   def change
     # Order.line_item abstraction
     create_table :order_line_items do |t|
-      t.references :order, foreign_key: true
+      t.references :order, foreign_key: false
       t.references :subscription, foreign_key: false
       t.integer :grams
       t.string :price

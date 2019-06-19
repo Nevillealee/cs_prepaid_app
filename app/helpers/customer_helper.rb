@@ -12,13 +12,13 @@ module CustomerHelper
     puts "MYURI= #{myuri}"
     customers = HTTParty.get("https://api.rechargeapps.com/customers/count?status=active", :headers => my_header)
     num_customers = customers['count'].to_i
-    Resque.logger.debug "We have #{num_customers} ACTIVE customers"
+    Resque.logger.info "We have #{num_customers} ACTIVE customers"
 
     Customer.delete_all
 
     my_conn =  PG.connect(myuri.hostname, myuri.port, nil, nil, myuri.path[1..-1], myuri.user, myuri.password)
     puts "my_conn: #{my_conn}"
-    my_insert = "insert into customers (id, shopify_customer_id, email, created_at, updated_at, status, first_name, last_name, has_card_error_in_dunning, number_subscriptions, number_active_subscriptions, first_charge_processed_at ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (id) DO UPDATE SET shopify_customer_id = EXCLUDED.shopify_customer_id, created_at = EXCLUDED.created_at, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, has_card_error_in_dunning = EXCLUDED.has_card_error_in_dunning, first_charge_processed_at = EXCLUDED.first_charge_processed_at;"
+    my_insert = "insert into customers (id, shopify_customer_id, email, created_at, updated_at, status, first_name, last_name, has_card_error_in_dunning, number_subscriptions, number_active_subscriptions, first_charge_processed_at ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (id) DO UPDATE SET shopify_customer_id = EXCLUDED.shopify_customer_id, updated_at = EXCLUDED.updated_at, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, status = EXCLUDED.status, number_subscriptions = EXCLUDED.number_subscriptions, number_active_subscriptions = EXCLUDED.number_active_subscriptions, has_card_error_in_dunning = EXCLUDED.has_card_error_in_dunning, first_charge_processed_at = EXCLUDED.first_charge_processed_at;"
     my_conn.prepare('statement1', "#{my_insert}")
 
     start = Time.now
@@ -29,7 +29,6 @@ module CustomerHelper
       my_customers = customers.parsed_response['customers']
       recharge_limit = customers.response["x-recharge-limit"]
       my_customers.each do |mycust|
-        #logger.debug
         puts mycust.inspect
         id = mycust['id']
         shopify_customer_id = mycust['shopify_customer_id']
@@ -67,17 +66,17 @@ module CustomerHelper
     puts "MYURI= #{myuri}"
 
     twenty_five_minutes_ago_str = twenty_five_min
-    Resque.logger.debug "Here twenty_five_minutes_ago_str = #{twenty_five_minutes_ago_str}"
+    Resque.logger.info "Here twenty_five_minutes_ago_str = #{twenty_five_minutes_ago_str}"
     customers_count = HTTParty.get("https://api.rechargeapps.com/customers/count?updated_at_min=\'#{twenty_five_minutes_ago_str}\'", :headers => my_header)
     my_response = customers_count
     num_customers = my_response['count'].to_i
-    Resque.logger.debug "We have #{num_customers} customers updated since twenty five minutes ago: #{twenty_five_minutes_ago_str}"
+    Resque.logger.info "We have #{num_customers} customers updated since twenty five minutes ago: #{twenty_five_minutes_ago_str}"
 
 
     my_conn =  PG.connect(myuri.hostname, myuri.port, nil, nil, myuri.path[1..-1], myuri.user, myuri.password)
     puts "my_conn: #{my_conn}"
 
-    my_insert = "insert into customers (id, shopify_customer_id, email, created_at, updated_at, status, first_name, last_name, has_card_error_in_dunning, number_subscriptions, number_active_subscriptions, first_charge_processed_at ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (id) DO UPDATE SET shopify_customer_id = EXCLUDED.shopify_customer_id, created_at = EXCLUDED.created_at, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, has_card_error_in_dunning = EXCLUDED.has_card_error_in_dunning, first_charge_processed_at = EXCLUDED.first_charge_processed_at;"
+    my_insert = "insert into customers (id, shopify_customer_id, email, created_at, updated_at, status, first_name, last_name, has_card_error_in_dunning, number_subscriptions, number_active_subscriptions, first_charge_processed_at ) values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) ON CONFLICT (id) DO UPDATE SET shopify_customer_id = EXCLUDED.shopify_customer_id, updated_at = EXCLUDED.updated_at, first_name = EXCLUDED.first_name, last_name = EXCLUDED.last_name, email = EXCLUDED.email, status = EXCLUDED.status, number_subscriptions = EXCLUDED.number_subscriptions, number_active_subscriptions = EXCLUDED.number_active_subscriptions, has_card_error_in_dunning = EXCLUDED.has_card_error_in_dunning, first_charge_processed_at = EXCLUDED.first_charge_processed_at;"
     my_conn.prepare('statement1', "#{my_insert}")
 
     start = Time.now
