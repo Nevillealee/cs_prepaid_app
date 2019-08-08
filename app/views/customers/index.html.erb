@@ -6,6 +6,7 @@
       <%= submit_tag 'Search', { name: nil, class: 'btn btn-outline-success my-2 my-sm-0' } %>
     </div>
   <% end %>
+  <%= will_paginate @customers, class: 'digg_pagination' %>
   <table class="table">
     <thead>
       <tr>
