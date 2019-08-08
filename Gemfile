@@ -41,6 +41,8 @@ gem 'typhoeus'
 gem 'dotenv-rails',  require: 'dotenv/rails-now'
 # homepage pagination
 gem 'will_paginate', '~> 3.1.0'
+# user activity tracking
+gem 'paper_trail'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

@@ -1,6 +1,6 @@
 class Order < ApplicationRecord
   include Requestable
-
+  has_paper_trail
   has_many :order_line_items
   # i.e. order contains multiple recurring subscriptions purchased at once
   has_many :subscriptions, through: :order_line_items

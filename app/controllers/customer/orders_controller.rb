@@ -22,6 +22,7 @@ class Customer::OrdersController < ApplicationController
 
   # activates if order.exists?
   def update
+    PaperTrail.request.whodunnit = current_user.id
     @order = Order.find(params[:id])
     all_params = {line_items: line_item_params,
                   prop_params: properties_params,

@@ -3,7 +3,6 @@ class CustomersController < ApplicationController
   before_action :authenticate_user!
 
   def index
-    puts ",made it to controller"
     @customers = Customer.search(query_params[:q]).paginate(:page => params[:page])
   end
 

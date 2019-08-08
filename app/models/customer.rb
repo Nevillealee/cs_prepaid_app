@@ -3,7 +3,6 @@ class Customer < ApplicationRecord
   has_many :subscriptions
   has_many :addresses
   has_many :orders
-
   # returns search result on customers table
   #
   # @param query [String] search parameter
@@ -11,8 +10,6 @@ class Customer < ApplicationRecord
   def self.search(query)
     if query.present?
       my_query = query.strip
-      puts "made it inside condition"
-      puts my_query
       if /^[a-zA-Z .]*$/.match(my_query) || /@/.match(my_query) || /^([0-9]*[a-zA-Z][a-zA-Z0-9_]*)$/.match(my_query)
         queries = my_query.split(' ')
         puts "multi string query"

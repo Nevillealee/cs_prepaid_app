@@ -29,6 +29,7 @@ class Upsert
     temp.try(:each) do |my_hashes|
       # Rails (db user given in env or config) must have superuser privilleges
       ActiveRecord::Base.connection.disable_referential_integrity do
+        #TODO(Neville lee) replace [:all] with my_columns.map!(&:to_sym)
         my_class.import(my_columns, my_hashes, batch_size: 10000, on_duplicate_key_update: :all)
       end
     end

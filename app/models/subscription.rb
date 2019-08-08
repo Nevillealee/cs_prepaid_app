@@ -1,6 +1,6 @@
 class Subscription < ApplicationRecord
   include Requestable
-
+  has_paper_trail
   belongs_to :customer, optional: true
   belongs_to :address, optional: true
   has_many :line_items
